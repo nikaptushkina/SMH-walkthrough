@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 11% 98%;
+    --foreground: 210 37% 18%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 210 37% 18%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 37% 18%;
+    
+    --primary: 212 100% 47%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 210 11% 96%;
+    --secondary-foreground: 210 37% 18%;
+    
+    --muted: 210 11% 92%;
+    --muted-foreground: 210 10% 45%;
+    
+    --accent: 210 11% 92%;
+    --accent-foreground: 212 100% 47%;
+    
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 210 11% 88%;
+    --input: 210 11% 88%;
+    --ring: 212 100% 47%;
+    
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 210 20% 10%;
+    --foreground: 210 11% 98%;
+    
+    --card: 210 20% 12%;
+    --card-foreground: 210 11% 98%;
+    
+    --popover: 210 20% 12%;
+    --popover-foreground: 210 11% 98%;
+    
+    --primary: 212 100% 47%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 210 20% 15%;
+    --secondary-foreground: 210 11% 98%;
+    
+    --muted: 210 20% 15%;
+    --muted-foreground: 210 10% 65%;
+    
+    --accent: 210 20% 15%;
+    --accent-foreground: 212 100% 60%;
+    
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 11% 98%;
+    
+    --border: 210 20% 20%;
+    --input: 210 20% 20%;
+    --ring: 212 100% 47%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-primary/20;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .sap-card {
+    @apply bg-card border border-border shadow-sm hover:shadow-md transition-all duration-300 rounded-lg overflow-hidden;
+  }
+
+  .sap-tab-active {
+    @apply border-b-2 border-primary text-primary font-semibold;
+  }
+
+  .sap-tab-inactive {
+    @apply border-b-2 border-transparent text-muted-foreground hover:text-foreground transition-colors;
+  }
+
+  .sap-btn-primary {
+    @apply bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors shadow-sm active:scale-95;
+  }
+
+  .sap-btn-secondary {
+    @apply bg-secondary text-secondary-foreground border border-border px-4 py-2 rounded-md hover:bg-accent transition-colors shadow-sm active:scale-95;
+  }
+}
+
+.animate-in {
+  animation: animate-in 0.4s ease-out;
+}
+
+@keyframes animate-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
