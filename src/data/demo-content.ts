@@ -48,101 +48,92 @@ export const DEMO_SECTIONS: DemoSection[] = [
         mediaUrl: '/Section 1 - Slide 1.png',
         audioUrl: '/Section 1 - Audio 1.mp3',
         mediaType: 'image',
-        bullets: [
-          'Slide content uploaded.',
-          'Narration notes pending.',
-        ],
+        bullets: ['Connecting shop‑floor operations to enterprise decision‑making', 'PDF Solutions integrated with SAP'],
       },
       {
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%202.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 2.mp3',
-        bullets: [
-          'Video slide plays automatically when this slide is active.',
-          'Narration notes pending.',
-        ],
+        bullets: ['Yield outcomes affect financial results', 'Material choices drive cost', 'Cycle time influences profitability'],
       },
       {
         mediaUrl: '/Section 1 - Slide 3.png',
         audioUrl: '/Section 1 - Audio 3.mp3',
         mediaType: 'image',
-        bullets: [
-          'Slide content uploaded.',
-          'Narration notes pending.',
-        ],
+        bullets: ['Visibility between operations and finance is critical', 'Timing matters for business decisions'],
       },
       {
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%204.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 4.mp3',
-        bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
+        bullets: ['Semiconductor manufacturing is highly complex', 'Thousands of steps across many tools', 'ERP systems see only summarized representations'],
       },
       {
         mediaUrl: '/Section 1 - Slide 5.png',
         audioUrl: '/Section 1 - Audio 5.mp3',
         mediaType: 'image',
-        bullets: ['Slide content uploaded.', 'Narration notes pending.'],
+        bullets: ['Manufacturing data exists in many systems', 'Equipment and MES data is separate', 'Manufacturing repositories, test, and supply chain are isolated'],
       },
       {
         mediaUrl: '/Section 1 - Slide 6.png',
         audioUrl: '/Section 1 - Audio 6.mp3',
         mediaType: 'image',
-        bullets: ['Slide content uploaded.', 'Narration notes pending.'],
+        bullets: ['Manufacturing data is not standardized', 'Systems are not connected end‑to‑end', 'ERP receives incomplete information', 'Financial impact is hard to assess'],
       },
       {
         mediaUrl: '/Section 1 - Slide 7.png',
         audioUrl: '/Section 1 - Audio 7.mp3',
         mediaType: 'image',
-        bullets: ['Slide content uploaded.', 'Narration notes pending.'],
+        bullets: ['PDF Solutions and SAP working together', 'Bridging operational and financial data', 'Enabling faster business outcomes'],
       },
       {
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%208.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 8.mp3',
-        bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
+        bullets: ['Sapience Manufacturing Hub at the core', 'Unified interface for factory systems', 'Centralized operational data layer', 'Connects MES and factory systems to SAP S/4HANA'],
       },
       {
         mediaUrl: '/Section 1 - Slide 9.png',
         audioUrl: '/Section 1 - Audio 9.mp3',
         mediaType: 'image',
-        bullets: ['Slide content uploaded.', 'Narration notes pending.'],
+        bullets: ['Manufacturing events standardized', 'Semantic alignment applied', 'Events aggregated across sources', 'Single, consistent data foundation in SAP'],
       },
       {
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%2010.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 10.mp3',
-        bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
+        bullets: ['Manufacturing workflows are non‑linear', 'Lots routinely split and merge', 'Rework is common in semiconductor fabs', 'ERP consistency must be maintained'],
       },
       {
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%2011.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 11.mp3',
-        bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
+        bullets: ['Production order originates in SAP S/4HANA', 'Order prepared for shop‑floor execution', 'SMH orchestrates the handoff'],
       },
       {
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%2012.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 12.mp3',
-        bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
+        bullets: ['Manufacturing execution creates many events', 'MES events captured continuously', 'Thousands of steps aggregated into milestones'],
       },
       {
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%2013.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 13.mp3',
-        bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
+        bullets: ['Reduced integration build and maintenance effort', 'Faster deployments across sites', 'Improved traceability and throughput', 'Consistent manufacturing data for SAP'],
       },
       {
         mediaUrl: '/Section 1 - Slide 14.png',
         audioUrl: '/Section 1 - Audio 14.mp3',
         mediaType: 'image',
-        bullets: ['Slide content uploaded.', 'Narration notes pending.'],
+        bullets: ['Unified manufacturing data foundation', 'Enables product costing', 'Supports sustainability analytics', 'Powers lot genealogy and cost of yield'],
       },
     ],
     nextSectionId: 'costing',

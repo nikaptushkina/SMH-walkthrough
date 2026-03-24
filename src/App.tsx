@@ -570,7 +570,7 @@ export default function App() {
                             className="sap-btn-primary py-1.5 text-sm inline-flex items-center gap-2"
                           >
                             {isAudioPlaying ? <Pause className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-                            {isAudioPlaying ? '⏸ Pause Audio' : '🔊 Play Audio'}
+                            {isAudioPlaying ? 'Pause Audio' : 'Play Audio'}
                           </button>
                         </>
                       ) : (
