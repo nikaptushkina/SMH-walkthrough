@@ -223,10 +223,10 @@ export default function App() {
       <header className="h-16 bg-card border-b border-border flex items-center px-6 sticky top-0 z-50 shadow-sm">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-primary rounded flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-xs">SAP</span>
+            <span className="text-primary-foreground font-bold text-xs">PDF | SAP</span>
           </div>
           <h1 className="text-lg font-semibold tracking-tight text-foreground">
-            From Shop Floor to Enterprise Decisions: SMH, SAP, and Joule
+            From Shop Floor to Top Floor: Connection Sapience Manufacturing Hub & Joule
           </h1>
         </div>
       </header>
