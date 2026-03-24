@@ -46,6 +46,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
     slides: [
       {
         mediaUrl: '/Section 1 - Slide 1.png',
+        audioUrl: '/Section 1 - Audio 1.mp3',
         mediaType: 'image',
         bullets: [
           'Slide content uploaded.',
@@ -56,6 +57,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%202.mp4',
         mediaType: 'video',
+        audioUrl: '/Section 1 - Audio 2.mp3',
         bullets: [
           'Video slide plays automatically when this slide is active.',
           'Narration notes pending.',
@@ -63,6 +65,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
       },
       {
         mediaUrl: '/Section 1 - Slide 3.png',
+        audioUrl: '/Section 1 - Audio 3.mp3',
         mediaType: 'image',
         bullets: [
           'Slide content uploaded.',
@@ -73,20 +76,24 @@ export const DEMO_SECTIONS: DemoSection[] = [
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%204.mp4',
         mediaType: 'video',
+        audioUrl: '/Section 1 - Audio 4.mp3',
         bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
       },
       {
         mediaUrl: '/Section 1 - Slide 5.png',
+        audioUrl: '/Section 1 - Audio 5.mp3',
         mediaType: 'image',
         bullets: ['Slide content uploaded.', 'Narration notes pending.'],
       },
       {
         mediaUrl: '/Section 1 - Slide 6.png',
+        audioUrl: '/Section 1 - Audio 6.mp3',
         mediaType: 'image',
         bullets: ['Slide content uploaded.', 'Narration notes pending.'],
       },
       {
         mediaUrl: '/Section 1 - Slide 7.png',
+        audioUrl: '/Section 1 - Audio 7.mp3',
         mediaType: 'image',
         bullets: ['Slide content uploaded.', 'Narration notes pending.'],
       },
@@ -94,10 +101,12 @@ export const DEMO_SECTIONS: DemoSection[] = [
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%208.mp4',
         mediaType: 'video',
+        audioUrl: '/Section 1 - Audio 8.mp3',
         bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
       },
       {
         mediaUrl: '/Section 1 - Slide 9.png',
+        audioUrl: '/Section 1 - Audio 9.mp3',
         mediaType: 'image',
         bullets: ['Slide content uploaded.', 'Narration notes pending.'],
       },
@@ -105,28 +114,33 @@ export const DEMO_SECTIONS: DemoSection[] = [
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%2010.mp4',
         mediaType: 'video',
+        audioUrl: '/Section 1 - Audio 10.mp3',
         bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
       },
       {
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%2011.mp4',
         mediaType: 'video',
+        audioUrl: '/Section 1 - Audio 11.mp3',
         bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
       },
       {
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%2012.mp4',
         mediaType: 'video',
+        audioUrl: '/Section 1 - Audio 12.mp3',
         bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
       },
       {
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%2013.mp4',
         mediaType: 'video',
+        audioUrl: '/Section 1 - Audio 13.mp3',
         bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
       },
       {
         mediaUrl: '/Section 1 - Slide 14.png',
+        audioUrl: '/Section 1 - Audio 14.mp3',
         mediaType: 'image',
         bullets: ['Slide content uploaded.', 'Narration notes pending.'],
       },
