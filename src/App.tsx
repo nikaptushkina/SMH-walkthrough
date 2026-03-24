@@ -65,9 +65,13 @@ export default function App() {
     () => `Slide ${activeSlideIndex + 1} of ${activeSection.slides.length}`,
     [activeSection.slides.length, activeSlideIndex]
   );
+    const hasSlideAudio = Boolean(activeSlide?.audioUrl);
+  const isEmbeddedWatchUrl = /^https?:\/\/(www\.)?(youtube\.com|player\.vimeo\.com)\//.test(
+    activeSection.watchVideoUrl
+  );
 
   const playSlideAudio = (restart = false) => {
-    if (!activeSlide) {
+    if (!activeSlide?.audioUrl) {
       return;
     }
 
@@ -226,11 +230,24 @@ export default function App() {
                     isFullscreen && 'max-w-none h-full aspect-auto rounded-none shadow-none border-none'
                   )}
                 >
-                  <img
-                    src={activeSlide.imageUrl}
-                    alt={`${activeSection.title} slide ${activeSlideIndex + 1}`}
-                    className="w-full h-full object-contain transition-opacity duration-500"
-                  />
+                  {activeSlide.mediaType === 'video' ? (
+                    <video
+                      key={activeSlide.mediaUrl}
+                      src={activeSlide.mediaUrl}
+                      className="w-full h-full object-contain bg-black"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      controls
+                    />
+                  ) : (
+                    <img
+                      src={activeSlide.mediaUrl}
+                      alt={`${activeSection.title} slide ${activeSlideIndex + 1}`}
+                      className="w-full h-full object-contain transition-opacity duration-500"
+                    />
+                  )}
                   <div className="absolute bottom-4 right-4 flex gap-2">
                     {activeSection.slides.map((_, index) => (
                       <button
@@ -272,14 +289,24 @@ export default function App() {
                 )}
               </div>
             ) : (
-              <iframe
-                className="w-full h-full"
-                src={activeSection.watchVideoUrl}
-                title="Watch demo video player"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+              isEmbeddedWatchUrl ? (
+                <iframe
+                  className="w-full h-full"
+                  src={activeSection.watchVideoUrl}
+                  title="Watch demo video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <video
+                  key={activeSection.watchVideoUrl}
+                  src={activeSection.watchVideoUrl}
+                  className="w-full h-full"
+                  controls
+                  playsInline
+                />
+              )
             )}
           </div>
 
@@ -377,21 +404,27 @@ export default function App() {
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-semibold text-foreground">{browseProgressLabel}</p>
                     <div className="flex items-center gap-2">
-                      <button
-                        onClick={restartSlideAudio}
-                        className="sap-btn-secondary py-1.5 px-2.5 text-sm inline-flex items-center"
-                        aria-label="Restart slide audio from beginning"
-                        title="Restart audio from beginning"
-                      >
-                        <RotateCcw className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={isAudioPlaying ? pauseSlideAudio : playSlideAudio}
-                        className="sap-btn-primary py-1.5 text-sm inline-flex items-center gap-2"
-                      >
-                        {isAudioPlaying ? <Pause className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-                        {isAudioPlaying ? '⏸ Pause Audio' : '🔊 Play Audio'}
-                      </button>
+                      {hasSlideAudio ? (
+                        <>
+                          <button
+                            onClick={restartSlideAudio}
+                            className="sap-btn-secondary py-1.5 px-2.5 text-sm inline-flex items-center"
+                            aria-label="Restart slide audio from beginning"
+                            title="Restart audio from beginning"
+                          >
+                            <RotateCcw className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={isAudioPlaying ? pauseSlideAudio : () => playSlideAudio()}
+                            className="sap-btn-primary py-1.5 text-sm inline-flex items-center gap-2"
+                          >
+                            {isAudioPlaying ? <Pause className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                            {isAudioPlaying ? '⏸ Pause Audio' : '🔊 Play Audio'}
+                          </button>
+                        </>
+                      ) : (
+                        <span className="text-xs text-muted-foreground">Audio for this slide is coming soon.</span>
+                      )}
                     </div>
                   </div>
 
@@ -402,9 +435,11 @@ export default function App() {
                   </ul>
 
                   <p className="text-xs text-muted-foreground">
-                    {isAudioPlaying
-                      ? 'Audio is playing for this slide. You can navigate anytime.'
-                      : 'Audio is optional. Click through silently or narrate live as needed.'}
+                    {!hasSlideAudio
+                      ? 'Audio is not uploaded for this slide yet.'
+                      : isAudioPlaying
+                        ? 'Audio is playing for this slide. You can navigate anytime.'
+                        : 'Audio is optional. Click through silently or narrate live as needed.'}
                   </p>
                 </div>
               )}

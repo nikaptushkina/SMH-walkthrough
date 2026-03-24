@@ -18,9 +18,10 @@ export const VIEW_MODES: ViewMode[] = [
 ];
 
 export interface Slide {
-  imageUrl: string;
+  mediaUrl: string;
+  mediaType: 'image' | 'video';
   bullets: string[];
-  audioUrl: string;
+  audioUrl?: string;
 }
 
 export interface DemoSection {
@@ -37,39 +38,90 @@ export interface DemoSection {
 export const DEMO_SECTIONS: DemoSection[] = [
   {
     id: 'overview',
-    title: 'SMH Overview',
+    title: 'Section 1',
     audience: 'Plant Managers & Operations Teams',
     description:
-      'A deep dive into SMH—the bridge between shop floor data and enterprise strategy, with real-time visibility into manufacturing operations.',
-    watchVideoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+      'Section 1 walkthrough content with uploaded slides. Notes and per-slide narration can be added once available.',
+    watchVideoUrl: '/Section 1 Video.mp4',
     slides: [
       {
-        imageUrl:
-          'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1200',
+        mediaUrl: '/Section 1 - Slide 1.png',
+        mediaType: 'image',
         bullets: [
-          'SMH unifies machine, quality, and production data into one operational view.',
-          'Teams can monitor throughput and downtime from a single dashboard.',
-          'Insights are available in near real time for faster plant-level decisions.',
+          'Slide content uploaded.',
+          'Narration notes pending.',
         ],
-        audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
       },
       {
-        imageUrl:
-          'https://images.unsplash.com/photo-1565514020179-026b92b84bb6?auto=format&fit=crop&q=80&w=1200',
+        mediaUrl: '/Section 1 - Slide 2.mp4',
+        mediaType: 'video',
         bullets: [
-          'Line supervisors can compare current shift performance against targets.',
-          'Exception highlights surface bottlenecks before they escalate.',
+          'Video slide plays automatically when this slide is active.',
+          'Narration notes pending.',
         ],
-        audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
       },
       {
-        imageUrl:
-          'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1200',
+        mediaUrl: '/Section 1 - Slide 3.png',
+        mediaType: 'image',
         bullets: [
-          'Operational KPIs are captured in a standard model for enterprise reporting.',
-          'Teams can align production execution with strategic business priorities.',
+          'Slide content uploaded.',
+          'Narration notes pending.',
         ],
-        audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+      },
+      {
+        mediaUrl: '/Section 1 - Slide 4.mp4',
+        mediaType: 'video',
+        bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
+      },
+      {
+        mediaUrl: '/Section 1 - Slide 5.png',
+        mediaType: 'image',
+        bullets: ['Slide content uploaded.', 'Narration notes pending.'],
+      },
+      {
+        mediaUrl: '/Section 1 - Slide 6.png',
+        mediaType: 'image',
+        bullets: ['Slide content uploaded.', 'Narration notes pending.'],
+      },
+      {
+        mediaUrl: '/Section 1 - Slide 7.png',
+        mediaType: 'image',
+        bullets: ['Slide content uploaded.', 'Narration notes pending.'],
+      },
+      {
+        mediaUrl: '/Section 1 - Slide 8.mp4',
+        mediaType: 'video',
+        bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
+      },
+      {
+        mediaUrl: '/Section 1 - Slide 9.png',
+        mediaType: 'image',
+        bullets: ['Slide content uploaded.', 'Narration notes pending.'],
+      },
+      {
+        mediaUrl: '/Section 1 - Slide 10.mp4',
+        mediaType: 'video',
+        bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
+      },
+      {
+        mediaUrl: '/Section 1 - Slide 11.mp4',
+        mediaType: 'video',
+        bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
+      },
+      {
+        mediaUrl: '/Section 1 - Slide 12.mp4',
+        mediaType: 'video',
+        bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
+      },
+      {
+        mediaUrl: '/Section 1 - Slide 13.mp4',
+        mediaType: 'video',
+        bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
+      },
+      {
+        mediaUrl: '/Section 1 - Slide 14.png',
+        mediaType: 'image',
+        bullets: ['Slide content uploaded.', 'Narration notes pending.'],
       },
     ],
     nextSectionId: 'costing',
@@ -84,8 +136,9 @@ export const DEMO_SECTIONS: DemoSection[] = [
     watchVideoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
     slides: [
       {
-        imageUrl:
+        mediaUrl:
           'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200',
+        mediaType: 'image',
         bullets: [
           'Cost rollups combine labor, material, and overhead by product family.',
           'Users can analyze cost variance between planned and actual production.',
@@ -93,8 +146,9 @@ export const DEMO_SECTIONS: DemoSection[] = [
         audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
       },
       {
-        imageUrl:
+        mediaUrl:
           'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200',
+        mediaType: 'image',
         bullets: [
           'Scenario comparisons reveal margin impact before changing production mix.',
           'Finance and operations teams share the same costing assumptions.',
@@ -102,8 +156,9 @@ export const DEMO_SECTIONS: DemoSection[] = [
         audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
       },
       {
-        imageUrl:
+        mediaUrl:
           'https://images.unsplash.com/photo-1543286386-2e659306cd6c?auto=format&fit=crop&q=80&w=1200',
+        mediaType: 'image',
         bullets: [
           'Leaders can prioritize orders based on profitability and capacity constraints.',
           'Cost transparency supports strategic negotiation with suppliers and customers.',
@@ -123,8 +178,9 @@ export const DEMO_SECTIONS: DemoSection[] = [
     watchVideoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
     slides: [
       {
-        imageUrl:
+        mediaUrl:
           'https://images.unsplash.com/photo-1558494949-ef010cbdcc48?auto=format&fit=crop&q=80&w=1200',
+        mediaType: 'image',
         bullets: [
           'Event pipelines move production data into SAP-aligned business objects.',
           'Integration safeguards data quality, traceability, and consistency.',
@@ -132,8 +188,9 @@ export const DEMO_SECTIONS: DemoSection[] = [
         audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
       },
       {
-        imageUrl:
+        mediaUrl:
           'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1200',
+        mediaType: 'image',
         bullets: [
           'Reference architecture supports modular deployment across sites.',
           'Security controls are enforced from edge systems through enterprise APIs.',
@@ -141,8 +198,9 @@ export const DEMO_SECTIONS: DemoSection[] = [
         audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
       },
       {
-        imageUrl:
+        mediaUrl:
           'https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&q=80&w=1200',
+        mediaType: 'image',
         bullets: [
           'Integration telemetry helps teams detect latency and synchronization risks.',
           'Architecture choices can be tuned to business-critical manufacturing flows.',
