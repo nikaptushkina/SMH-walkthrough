@@ -4,6 +4,7 @@ import {
   Pause,
   Maximize,
   Minimize,
+  RotateCcw,
   Image as ImageIcon,
   ArrowRight,
   User,
@@ -29,6 +30,7 @@ export default function App() {
 
   const activeSlideIndex = slideIndexBySection[activeSection.id] ?? 0;
   const activeSlide = activeSection.slides[activeSlideIndex];
+  const isFullscreenBrowse = viewMode === 'browse' && isFullscreen;
 
   const stopAudio = () => {
     if (audioRef.current) {
@@ -64,13 +66,14 @@ export default function App() {
     [activeSection.slides.length, activeSlideIndex]
   );
 
-  const playSlideAudio = () => {
+  const playSlideAudio = (restart = false) => {
     if (!activeSlide) {
       return;
     }
 
     if (
       audioRef.current &&
+      !restart &&
       activeAudioUrlRef.current === activeSlide.audioUrl &&
       audioRef.current.paused
     ) {
@@ -93,6 +96,10 @@ export default function App() {
     audio.onpause = () => setIsAudioPlaying(false);
 
     void audio.play();
+  };
+
+  const restartSlideAudio = () => {
+    playSlideAudio(true);
   };
 
   const pauseSlideAudio = () => {
@@ -181,11 +188,18 @@ export default function App() {
         <div
           ref={demoCardRef}
           key={activeSection.id}
-          className="sap-card p-0 min-h-[600px] flex flex-col lg:flex-row bg-card animate-in"
+          className={cn(
+            'sap-card p-0 min-h-[600px] flex flex-col lg:flex-row bg-card animate-in',
+            viewMode === 'browse' && 'lg:items-stretch'
+          )}
         >
           <div
             ref={mediaFrameRef}
-            className="flex-1 border-b lg:border-b-0 lg:border-r border-border bg-black/5 relative aspect-video lg:aspect-auto"
+            className={cn(
+              'flex-1 border-b lg:border-b-0 lg:border-r border-border bg-black/5 relative aspect-video lg:aspect-auto',
+              viewMode === 'browse' && 'bg-black',
+              isFullscreen && viewMode === 'browse' && 'border-none'
+            )}
           >
             <button
               onClick={() => void toggleFullscreen()}
@@ -195,12 +209,20 @@ export default function App() {
               {isFullscreen ? 'Exit Full Screen' : 'Full Screen'}
             </button>
             {viewMode === 'browse' ? (
-              <div className="h-full flex flex-col items-center justify-center p-4">
-                <div className="relative w-full max-w-4xl aspect-video rounded-lg overflow-hidden shadow-2xl border border-border bg-card">
+              <div className={cn('h-full flex flex-col items-center justify-center p-4', isFullscreen && 'p-0')}>
+                <div
+                  className={cn(
+                    'relative w-full max-w-4xl aspect-video rounded-lg overflow-hidden shadow-2xl border border-border bg-card',
+                    isFullscreen && 'max-w-none h-full aspect-auto rounded-none shadow-none border-none'
+                  )}
+                >
                   <img
                     src={activeSlide.imageUrl}
                     alt={`${activeSection.title} slide ${activeSlideIndex + 1}`}
-                    className="w-full h-full object-cover transition-opacity duration-500"
+                    className={cn(
+                      'w-full h-full object-cover transition-opacity duration-500',
+                      isFullscreen && 'object-contain'
+                    )}
                   />
                   <div className="absolute bottom-4 right-4 flex gap-2">
                     {activeSection.slides.map((_, index) => (
@@ -217,7 +239,7 @@ export default function App() {
                   </div>
                 </div>
 
-                <div className="mt-4 flex gap-4">
+                <div className={cn('mt-4 flex gap-4', isFullscreen && 'absolute bottom-4 left-4 mt-0 z-10')}>
                   <button
                     onClick={() =>
                       handleSlideChange(
@@ -254,56 +276,83 @@ export default function App() {
 
           <div className="w-full lg:w-96 flex flex-col p-8 bg-card">
             <div className="flex-1 space-y-6">
-              <div className="space-y-2">
-                <h3 className="text-xl font-semibold text-foreground">{activeSection.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{activeSection.description}</p>
-              </div>
+              {!isFullscreenBrowse && (
+                <>
+                  <div className="space-y-2">
+                    <h3 className="text-xl font-semibold text-foreground">{activeSection.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{activeSection.description}</p>
+                  </div>
 
-              <div className="space-y-4">
-                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-2">
-                  <Info className="w-3.5 h-3.5" />
-                  Select Viewing Option
-                </label>
-                <div className="grid grid-cols-1 gap-2">
-                  {VIEW_MODES.map((mode) => (
-                    <button
-                      key={mode.id}
-                      onClick={() => {
-                        stopAudio();
-                        setViewMode(mode.id);
-                      }}
-                      className={cn(
-                        'flex items-start gap-3 px-4 py-3 rounded-lg border transition-all text-sm',
-                        viewMode === mode.id
-                          ? 'bg-primary/5 border-primary text-primary'
-                          : 'bg-transparent border-border text-muted-foreground hover:bg-secondary'
-                      )}
-                    >
-                      {mode.id === 'watch' ? (
-                        <Play className="w-4 h-4 mt-0.5" />
-                      ) : (
-                        <ImageIcon className="w-4 h-4 mt-0.5" />
-                      )}
-                      <span className="text-left">
-                        <span className="block font-medium">{mode.label}</span>
-                        <span className="block text-xs opacity-90">{mode.description}</span>
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </div>
+                  <div className="space-y-4">
+                    <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-2">
+                      <Info className="w-3.5 h-3.5" />
+                      Select Viewing Option
+                    </label>
+                    <div className="grid grid-cols-1 gap-2">
+                      {VIEW_MODES.map((mode) => (
+                        <button
+                          key={mode.id}
+                          onClick={() => {
+                            stopAudio();
+                            setViewMode(mode.id);
+                          }}
+                          className={cn(
+                            'flex items-start gap-3 px-4 py-3 rounded-lg border transition-all text-sm',
+                            viewMode === mode.id
+                              ? 'bg-primary/5 border-primary text-primary'
+                              : 'bg-transparent border-border text-muted-foreground hover:bg-secondary'
+                          )}
+                        >
+                          {mode.id === 'watch' ? (
+                            <Play className="w-4 h-4 mt-0.5" />
+                          ) : (
+                            <ImageIcon className="w-4 h-4 mt-0.5" />
+                          )}
+                          <span className="text-left">
+                            <span className="block font-medium">{mode.label}</span>
+                            <span className="block text-xs opacity-90">{mode.description}</span>
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
 
               {viewMode === 'browse' && (
                 <div className="space-y-4 rounded-lg border border-border p-4 bg-secondary/20">
+                  {isFullscreenBrowse && (
+                    <div className="flex justify-end">
+                      <button
+                        onClick={() => {
+                          stopAudio();
+                          setViewMode('watch');
+                        }}
+                        className="sap-btn-secondary py-1 text-xs"
+                      >
+                        Back to Video View
+                      </button>
+                    </div>
+                  )}
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-semibold text-foreground">{browseProgressLabel}</p>
-                    <button
-                      onClick={isAudioPlaying ? pauseSlideAudio : playSlideAudio}
-                      className="sap-btn-primary py-1.5 text-sm inline-flex items-center gap-2"
-                    >
-                      {isAudioPlaying ? <Pause className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-                      {isAudioPlaying ? '⏸ Pause Audio' : '🔊 Play Audio'}
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={restartSlideAudio}
+                        className="sap-btn-secondary py-1.5 px-2.5 text-sm inline-flex items-center"
+                        aria-label="Restart slide audio from beginning"
+                        title="Restart audio from beginning"
+                      >
+                        <RotateCcw className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={isAudioPlaying ? pauseSlideAudio : playSlideAudio}
+                        className="sap-btn-primary py-1.5 text-sm inline-flex items-center gap-2"
+                      >
+                        {isAudioPlaying ? <Pause className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                        {isAudioPlaying ? '⏸ Pause Audio' : '🔊 Play Audio'}
+                      </button>
+                    </div>
                   </div>
 
                   <ul className="list-disc pl-5 space-y-2 text-sm text-muted-foreground">
@@ -321,20 +370,22 @@ export default function App() {
               )}
             </div>
 
-            <div className="pt-8 mt-8 border-t border-border">
-              <button
-                onClick={handleNextSection}
-                className="w-full group flex items-center justify-between p-4 rounded-xl border border-primary/20 bg-primary/5 hover:bg-primary/10 transition-colors"
-              >
-                <div className="text-left">
-                  <p className="text-[10px] font-bold text-primary uppercase tracking-widest">Next Section</p>
-                  <p className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
-                    {activeSection.nextSectionLabel}
-                  </p>
-                </div>
-                <ArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
+            {!isFullscreenBrowse && (
+              <div className="pt-8 mt-8 border-t border-border">
+                <button
+                  onClick={handleNextSection}
+                  className="w-full group flex items-center justify-between p-4 rounded-xl border border-primary/20 bg-primary/5 hover:bg-primary/10 transition-colors"
+                >
+                  <div className="text-left">
+                    <p className="text-[10px] font-bold text-primary uppercase tracking-widest">Next Section</p>
+                    <p className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+                      {activeSection.nextSectionLabel}
+                    </p>
+                  </div>
+                  <ArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </main>
