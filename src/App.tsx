@@ -226,7 +226,7 @@ export default function App() {
             <span className="text-primary-foreground font-bold text-xs">PDF | SAP</span>
           </div>
           <h1 className="text-lg font-semibold tracking-tight text-foreground">
-            From Shop Floor to Top Floor: Connection Sapience Manufacturing Hub & Joule
+            From Shop Floor to Top Floor: Connecting Sapience Manufacturing Hub & Joule
           </h1>
         </div>
       </header>
