@@ -12,6 +12,7 @@ import {
   Info,
   Volume2,
   ChevronRight,
+  ChevronLeft,
 } from 'lucide-react';
 import { DEMO_SECTIONS, VIEW_MODES, type DemoSection } from './data/demo-content';
 import { cn } from './lib/utils';
@@ -31,6 +32,7 @@ export default function App() {
   const activeAudioUrlRef = useRef<string | null>(null);
   const demoCardRef = useRef<HTMLDivElement | null>(null);
   const mediaFrameRef = useRef<HTMLDivElement | null>(null);
+  const browseVideoRef = useRef<HTMLVideoElement | null>(null);
 
   const activeSlideIndex = slideIndexBySection[activeSection.id] ?? 0;
   const activeSlide = activeSection.slides[activeSlideIndex];
@@ -104,6 +106,17 @@ export default function App() {
   const playSlideAudio = (restart = false) => {
     if (!activeSlide?.audioUrl) {
       return;
+    }
+
+    const shouldSyncWithVideo = viewMode === 'browse' && activeSlide.mediaType === 'video';
+    if (shouldSyncWithVideo) {
+      restart = true;
+      if (browseVideoRef.current) {
+        browseVideoRef.current.currentTime = 0;
+        void browseVideoRef.current.play().catch(() => {
+          // Ignore playback rejections caused by browser autoplay policies.
+        });
+      }
     }
 
     if (
@@ -325,6 +338,16 @@ export default function App() {
                   isFullscreen && 'p-8'
                 )}
               >
+                {isFullscreenBrowse && isFullscreenNotesHidden && (
+                  <button
+                    onClick={() => setIsFullscreenNotesHidden(false)}
+                    className="absolute top-4 right-4 z-20 h-8 w-8 rounded-full border border-border bg-card text-muted-foreground shadow-md transition hover:text-foreground hover:bg-secondary inline-flex items-center justify-center"
+                    aria-label="Show notes panel"
+                    title="Show notes panel"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </button>
+                )}
                 <div
                   className={cn(
                     'relative w-full max-w-4xl aspect-video rounded-lg overflow-hidden shadow-2xl border border-border bg-card',
@@ -334,6 +357,7 @@ export default function App() {
                 >
                   {activeSlide.mediaType === 'video' ? (
                     <video
+                      ref={browseVideoRef}
                       key={activeSlideMediaUrl}
                       src={activeSlideMediaUrl}
                       className="w-full h-full object-contain bg-black"
