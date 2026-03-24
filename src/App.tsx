@@ -46,6 +46,8 @@ export default function App() {
   };
   const activeSlideMediaUrl = resolveMediaUrl(activeSlide.mediaUrl);
   const activeSectionWatchUrl = resolveMediaUrl(activeSection.watchVideoUrl);
+  const pdfLogoUrl = resolveMediaUrl('/favicon.svg');
+  const sapLogoUrl = resolveMediaUrl('/SAP_2011_logo.svg');
   const isLocalAssetUrl = (url: string) =>
     !/^(https?:)?\/\//.test(url) && !url.startsWith('data:') && !url.startsWith('blob:');
 
@@ -220,10 +222,20 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header className="h-16 bg-card border-b border-border flex items-center px-6 sticky top-0 z-50 shadow-sm">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-primary rounded flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-xs">PDF | SAP</span>
+      <header className="bg-card border-b border-border sticky top-0 z-50 shadow-sm">
+        <div className="px-6 py-4 flex flex-col gap-3">
+          <div className="inline-flex items-center gap-4 self-start rounded-lg border border-border bg-background px-4 py-2">
+            <img
+              src={pdfLogoUrl}
+              alt="PDF logo"
+              className="h-8 w-auto object-contain"
+            />
+            <div className="h-8 w-px bg-border" aria-hidden="true" />
+            <img
+              src={sapLogoUrl}
+              alt="SAP logo"
+              className="h-8 w-auto object-contain"
+            />
           </div>
           <h1 className="text-lg font-semibold tracking-tight text-foreground">
             From Shop Floor to Top Floor: Connecting Sapience Manufacturing Hub & Joule

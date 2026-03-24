@@ -179,36 +179,76 @@ export const DEMO_SECTIONS: DemoSection[] = [
     audience: 'An in‑depth look at data, analytics, and AI in action',
     description:
       'Dive deeper into the end‑to‑end flow between SAP, Sapience Manufacturing Hub, and PDF Operational Product Costing. This section walks through the detailed demo experience, showing how manufacturing events are aggregated, analyzed, and transformed into actionable insights using SAP Joule.',
-    watchVideoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    watchVideoUrl:
+      'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%203%20Video.mp4',
     slides: [
       {
-        mediaUrl:
-          'https://images.unsplash.com/photo-1558494949-ef010cbdcc48?auto=format&fit=crop&q=80&w=1200',
+        mediaUrl: '/Section 3 - Slide 1.png',
         mediaType: 'image',
-        bullets: [
-          'Event pipelines move production data into SAP-aligned business objects.',
-          'Integration safeguards data quality, traceability, and consistency.',
-        ],
+        bullets: ['Slide content uploaded.', 'Narration notes pending.'],
+      },
+      {
+        mediaUrl:
+          'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%203%20-%20Slide%202.mp4',
+        mediaType: 'video',
+        bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
+      },
+      {
+        mediaUrl: '/Section 3 - Slide 3.png',
+        mediaType: 'image',
+        bullets: ['Slide content uploaded.', 'Narration notes pending.'],
         audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
       },
       {
         mediaUrl:
-          'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1200',
+          'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%203%20-%20Slide%204.mp4',
+        mediaType: 'video',
+        bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
+      },
+      {
+        mediaUrl: '/Section 3 - Slide 5.png',
         mediaType: 'image',
-        bullets: [
-          'Reference architecture supports modular deployment across sites.',
-          'Security controls are enforced from edge systems through enterprise APIs.',
-        ],
+        bullets: ['Slide content uploaded.', 'Narration notes pending.'],
         audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
       },
       {
         mediaUrl:
-          'https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&q=80&w=1200',
+          'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%203%20-%20Slide%206.mp4',
+        mediaType: 'video',
+        bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
+      },
+      {
+        mediaUrl:
+          'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%203%20-%20Slide%207.mp4',
+        mediaType: 'video',
+        bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
+      },
+      {
+        mediaUrl:
+          'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%203%20-%20Slide%208.mp4',
+        mediaType: 'video',
+        bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
+      },
+      {
+        mediaUrl: '/Section 3 - Slide 9.png',
         mediaType: 'image',
-        bullets: [
-          'Integration telemetry helps teams detect latency and synchronization risks.',
-          'Architecture choices can be tuned to business-critical manufacturing flows.',
-        ],
+        bullets: ['Slide content uploaded.', 'Narration notes pending.'],
+      },
+      {
+        mediaUrl:
+          'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%203%20-%20Slide%2010.mp4',
+        mediaType: 'video',
+        bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
+      },
+      {
+        mediaUrl: '/Section 3 - Slide 11.png',
+        mediaType: 'image',
+        bullets: ['Slide content uploaded.', 'Narration notes pending.'],
+      },
+      {
+        mediaUrl: '/Section 3 - Slide 12.png',
+        mediaType: 'image',
+        bullets: ['Slide content uploaded.', 'Narration notes pending.'],
         audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3',
       },
     ],
