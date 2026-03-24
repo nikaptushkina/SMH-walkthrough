@@ -22,6 +22,7 @@ export default function App() {
   );
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [mediaIssue, setMediaIssue] = useState<string | null>(null);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const activeAudioUrlRef = useRef<string | null>(null);
@@ -45,6 +46,8 @@ export default function App() {
   };
   const activeSlideMediaUrl = resolveMediaUrl(activeSlide.mediaUrl);
   const activeSectionWatchUrl = resolveMediaUrl(activeSection.watchVideoUrl);
+  const isLocalAssetUrl = (url: string) =>
+    !/^(https?:)?\/\//.test(url) && !url.startsWith('data:') && !url.startsWith('blob:');
 
   const stopAudio = () => {
     if (audioRef.current) {
@@ -166,6 +169,55 @@ export default function App() {
     };
   }, []);
 
+  useEffect(() => {
+    const activeMediaUrl = viewMode === 'browse' ? activeSlide.mediaUrl : activeSection.watchVideoUrl;
+    const isVideoMedia =
+      (viewMode === 'browse' && activeSlide.mediaType === 'video') ||
+      (viewMode === 'watch' && !isEmbeddedWatchUrl);
+
+    if (!isVideoMedia || !isLocalAssetUrl(activeMediaUrl)) {
+      setMediaIssue(null);
+      return;
+    }
+
+    let cancelled = false;
+    const mediaUrl = resolveMediaUrl(activeMediaUrl);
+
+    const detectGitLfsPointer = async () => {
+      try {
+        const response = await fetch(mediaUrl, { cache: 'no-store' });
+        const snippet = (await response.text()).slice(0, 200);
+
+        if (!cancelled && snippet.startsWith('version https://git-lfs.github.com/spec/v1')) {
+          setMediaIssue(
+            'This video appears to be a Git LFS pointer file, not the actual MP4. Run `git lfs pull` in this repo and restart the dev server.'
+          );
+          return;
+        }
+
+        if (!cancelled) {
+          setMediaIssue(null);
+        }
+      } catch {
+        if (!cancelled) {
+          setMediaIssue('Unable to load this local video file. Verify it exists and is accessible.');
+        }
+      }
+    };
+
+    void detectGitLfsPointer();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    activeSection.watchVideoUrl,
+    activeSlide.mediaType,
+    activeSlide.mediaUrl,
+    isEmbeddedWatchUrl,
+    viewMode,
+  ]);
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <header className="h-16 bg-card border-b border-border flex items-center px-6 sticky top-0 z-50 shadow-sm">
@@ -223,7 +275,7 @@ export default function App() {
             ref={mediaFrameRef}
             className={cn(
               'flex-1 border-b lg:border-b-0 lg:border-r border-border bg-black/5 relative aspect-video lg:aspect-auto',
-              isFullscreenBrowse && 'bg-black',
+              isFullscreenBrowse && 'bg-background',
               isFullscreen && viewMode === 'browse' && 'border-none'
             )}
           >
@@ -240,14 +292,14 @@ export default function App() {
               <div
                 className={cn(
                   'h-full flex flex-col items-center justify-center p-4',
-                  isFullscreen && 'p-8 items-start justify-start'
+                  isFullscreen && 'p-8'
                 )}
               >
                 <div
                   className={cn(
                     'relative w-full max-w-4xl aspect-video rounded-lg overflow-hidden shadow-2xl border border-border bg-card',
                     isFullscreen &&
-                      'max-w-none h-auto max-h-[calc(100vh-4rem)] aspect-auto rounded-none shadow-none border-none'
+                      'max-w-[min(92vw,1600px)] max-h-[calc(100vh-10rem)] rounded-lg shadow-2xl border border-border'
                   )}
                 >
                   {activeSlide.mediaType === 'video' ? (
@@ -282,6 +334,11 @@ export default function App() {
                     ))}
                   </div>
                 </div>
+                {mediaIssue && (
+                  <div className="mt-3 w-full max-w-4xl rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+                    {mediaIssue}
+                  </div>
+                )}
 
                 {!isFullscreenBrowse && (
                   <div className="mt-4 flex gap-4">
@@ -421,7 +478,7 @@ export default function App() {
               )}
               {viewMode === 'browse' && isFullscreenBrowse && (
                 <div className="mt-4 space-y-2">
-                  <div className="flex items-center justify-end gap-2">
+                  <div className="flex items-center justify-center gap-2">
                     <button
                       onClick={() =>
                         handleSlideChange(
@@ -443,7 +500,7 @@ export default function App() {
                       Next
                     </button>
                   </div>
-                  <div className="flex items-center justify-end gap-2">
+                  <div className="flex items-center justify-center gap-2">
                     <button
                       onClick={() => {
                         stopAudio();
