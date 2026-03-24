@@ -150,27 +150,32 @@ export const DEMO_SECTIONS: DemoSection[] = [
     slides: [
       {
         mediaUrl: '/Section 2 - Slide 1.png',
+        audioUrl: '/Section 2 - Audio 1.mp3',
         mediaType: 'image',
         bullets: ['Slide content uploaded.', 'Narration notes pending.'],
       },
       {
         mediaUrl: '/Section 2 - Slide 2.png',
+        audioUrl: '/Section 2 - Audio 2.mp3',
         mediaType: 'image',
         bullets: ['Slide content uploaded.', 'Narration notes pending.'],
       },
       {
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%202%20-%20Slide%203.mp4',
+        audioUrl: '/Section 2 - Audio 3.mp3',
         mediaType: 'video',
         bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
       },
       {
         mediaUrl: '/Section 2 - Slide 4.png',
+        audioUrl: '/Section 2 - Audio 4.mp3',
         mediaType: 'image',
         bullets: ['Slide content uploaded.', 'Narration notes pending.'],
       },
       {
         mediaUrl: '/Section 2 - Slide 5.png',
+        audioUrl: '/Section 2 - Audio 5.mp3',
         mediaType: 'image',
         bullets: ['Slide content uploaded.', 'Narration notes pending.'],
       },
