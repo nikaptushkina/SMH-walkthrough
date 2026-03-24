@@ -125,6 +125,14 @@ export default function App() {
     await fullscreenTarget.requestFullscreen();
   };
 
+  const exitFullscreen = async () => {
+    if (!document.fullscreenElement) {
+      return;
+    }
+
+    await document.exitFullscreen();
+  };
+
   useEffect(() => {
     const handleFullscreenChange = () => {
       setIsFullscreen(Boolean(document.fullscreenElement));
@@ -197,17 +205,19 @@ export default function App() {
             ref={mediaFrameRef}
             className={cn(
               'flex-1 border-b lg:border-b-0 lg:border-r border-border bg-black/5 relative aspect-video lg:aspect-auto',
-              viewMode === 'browse' && 'bg-black',
+              isFullscreenBrowse && 'bg-black',
               isFullscreen && viewMode === 'browse' && 'border-none'
             )}
           >
-            <button
-              onClick={() => void toggleFullscreen()}
-              className="absolute top-3 right-3 z-10 sap-btn-secondary py-1 text-xs inline-flex items-center gap-1.5"
-            >
-              {isFullscreen ? <Minimize className="w-3.5 h-3.5" /> : <Maximize className="w-3.5 h-3.5" />}
-              {isFullscreen ? 'Exit Full Screen' : 'Full Screen'}
-            </button>
+            {!isFullscreenBrowse && (
+              <button
+                onClick={() => void toggleFullscreen()}
+                className="absolute top-3 right-3 z-10 sap-btn-secondary py-1 text-xs inline-flex items-center gap-1.5"
+              >
+                {isFullscreen ? <Minimize className="w-3.5 h-3.5" /> : <Maximize className="w-3.5 h-3.5" />}
+                {isFullscreen ? 'Exit Full Screen' : 'Full Screen'}
+              </button>
+            )}
             {viewMode === 'browse' ? (
               <div className={cn('h-full flex flex-col items-center justify-center p-4', isFullscreen && 'p-0')}>
                 <div
@@ -219,10 +229,7 @@ export default function App() {
                   <img
                     src={activeSlide.imageUrl}
                     alt={`${activeSection.title} slide ${activeSlideIndex + 1}`}
-                    className={cn(
-                      'w-full h-full object-cover transition-opacity duration-500',
-                      isFullscreen && 'object-contain'
-                    )}
+                    className="w-full h-full object-contain transition-opacity duration-500"
                   />
                   <div className="absolute bottom-4 right-4 flex gap-2">
                     {activeSection.slides.map((_, index) => (
@@ -239,28 +246,30 @@ export default function App() {
                   </div>
                 </div>
 
-                <div className={cn('mt-4 flex gap-4', isFullscreen && 'absolute bottom-4 left-4 mt-0 z-10')}>
-                  <button
-                    onClick={() =>
-                      handleSlideChange(
-                        activeSlideIndex > 0 ? activeSlideIndex - 1 : activeSection.slides.length - 1
-                      )
-                    }
-                    className="sap-btn-secondary py-1 text-sm"
-                  >
-                    Previous
-                  </button>
-                  <button
-                    onClick={() =>
-                      handleSlideChange(
-                        activeSlideIndex < activeSection.slides.length - 1 ? activeSlideIndex + 1 : 0
-                      )
-                    }
-                    className="sap-btn-primary py-1 text-sm"
-                  >
-                    Next
-                  </button>
-                </div>
+                {!isFullscreenBrowse && (
+                  <div className="mt-4 flex gap-4">
+                    <button
+                      onClick={() =>
+                        handleSlideChange(
+                          activeSlideIndex > 0 ? activeSlideIndex - 1 : activeSection.slides.length - 1
+                        )
+                      }
+                      className="sap-btn-secondary py-1 text-sm"
+                    >
+                      Previous
+                    </button>
+                    <button
+                      onClick={() =>
+                        handleSlideChange(
+                          activeSlideIndex < activeSection.slides.length - 1 ? activeSlideIndex + 1 : 0
+                        )
+                      }
+                      className="sap-btn-primary py-1 text-sm"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <iframe
@@ -331,6 +340,37 @@ export default function App() {
                         className="sap-btn-secondary py-1 text-xs"
                       >
                         Back to Video View
+                      </button>
+                    </div>
+                  )}
+                  {isFullscreenBrowse && (
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        onClick={() =>
+                          handleSlideChange(
+                            activeSlideIndex > 0 ? activeSlideIndex - 1 : activeSection.slides.length - 1
+                          )
+                        }
+                        className="sap-btn-secondary py-1 text-sm"
+                      >
+                        Previous
+                      </button>
+                      <button
+                        onClick={() =>
+                          handleSlideChange(
+                            activeSlideIndex < activeSection.slides.length - 1 ? activeSlideIndex + 1 : 0
+                          )
+                        }
+                        className="sap-btn-primary py-1 text-sm"
+                      >
+                        Next
+                      </button>
+                      <button
+                        onClick={() => void exitFullscreen()}
+                        className="sap-btn-secondary py-1 text-sm inline-flex items-center gap-1.5"
+                      >
+                        <Minimize className="w-3.5 h-3.5" />
+                        Exit Full Screen
                       </button>
                     </div>
                   )}
