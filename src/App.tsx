@@ -31,6 +31,20 @@ export default function App() {
   const activeSlideIndex = slideIndexBySection[activeSection.id] ?? 0;
   const activeSlide = activeSection.slides[activeSlideIndex];
   const isFullscreenBrowse = viewMode === 'browse' && isFullscreen;
+  const resolveMediaUrl = (url: string) => {
+    if (/^(https?:)?\/\//.test(url) || url.startsWith('data:') || url.startsWith('blob:')) {
+      return url;
+    }
+
+    const baseUrl = import.meta.env.BASE_URL ?? '/';
+    if (url.startsWith('/')) {
+      return `${baseUrl}${url.slice(1)}`;
+    }
+
+    return `${baseUrl}${url}`;
+  };
+  const activeSlideMediaUrl = resolveMediaUrl(activeSlide.mediaUrl);
+  const activeSectionWatchUrl = resolveMediaUrl(activeSection.watchVideoUrl);
 
   const stopAudio = () => {
     if (audioRef.current) {
@@ -67,7 +81,7 @@ export default function App() {
   );
     const hasSlideAudio = Boolean(activeSlide?.audioUrl);
   const isEmbeddedWatchUrl = /^https?:\/\/(www\.)?(youtube\.com|player\.vimeo\.com)\//.test(
-    activeSection.watchVideoUrl
+    activeSectionWatchUrl
   );
 
   const playSlideAudio = (restart = false) => {
@@ -223,17 +237,23 @@ export default function App() {
               </button>
             )}
             {viewMode === 'browse' ? (
-              <div className={cn('h-full flex flex-col items-center justify-center p-4', isFullscreen && 'p-0')}>
+              <div
+                className={cn(
+                  'h-full flex flex-col items-center justify-center p-4',
+                  isFullscreen && 'p-8 items-start justify-start'
+                )}
+              >
                 <div
                   className={cn(
                     'relative w-full max-w-4xl aspect-video rounded-lg overflow-hidden shadow-2xl border border-border bg-card',
-                    isFullscreen && 'max-w-none h-full aspect-auto rounded-none shadow-none border-none'
+                    isFullscreen &&
+                      'max-w-none h-auto max-h-[calc(100vh-4rem)] aspect-auto rounded-none shadow-none border-none'
                   )}
                 >
                   {activeSlide.mediaType === 'video' ? (
                     <video
-                      key={activeSlide.mediaUrl}
-                      src={activeSlide.mediaUrl}
+                      key={activeSlideMediaUrl}
+                      src={activeSlideMediaUrl}
                       className="w-full h-full object-contain bg-black"
                       autoPlay
                       loop
@@ -243,7 +263,7 @@ export default function App() {
                     />
                   ) : (
                     <img
-                      src={activeSlide.mediaUrl}
+                      src={activeSlideMediaUrl}
                       alt={`${activeSection.title} slide ${activeSlideIndex + 1}`}
                       className="w-full h-full object-contain transition-opacity duration-500"
                     />
@@ -292,7 +312,7 @@ export default function App() {
               isEmbeddedWatchUrl ? (
                 <iframe
                   className="w-full h-full"
-                  src={activeSection.watchVideoUrl}
+                  src={activeSectionWatchUrl}
                   title="Watch demo video player"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -300,8 +320,8 @@ export default function App() {
                 />
               ) : (
                 <video
-                  key={activeSection.watchVideoUrl}
-                  src={activeSection.watchVideoUrl}
+                  key={activeSectionWatchUrl}
+                  src={activeSectionWatchUrl}
                   className="w-full h-full"
                   controls
                   playsInline
@@ -357,50 +377,6 @@ export default function App() {
 
               {viewMode === 'browse' && (
                 <div className="space-y-4 rounded-lg border border-border p-4 bg-secondary/20">
-                  {isFullscreenBrowse && (
-                    <div className="flex justify-end">
-                      <button
-                        onClick={() => {
-                          stopAudio();
-                          setViewMode('watch');
-                        }}
-                        className="sap-btn-secondary py-1 text-xs"
-                      >
-                        Back to Video View
-                      </button>
-                    </div>
-                  )}
-                  {isFullscreenBrowse && (
-                    <div className="flex items-center justify-end gap-2">
-                      <button
-                        onClick={() =>
-                          handleSlideChange(
-                            activeSlideIndex > 0 ? activeSlideIndex - 1 : activeSection.slides.length - 1
-                          )
-                        }
-                        className="sap-btn-secondary py-1 text-sm"
-                      >
-                        Previous
-                      </button>
-                      <button
-                        onClick={() =>
-                          handleSlideChange(
-                            activeSlideIndex < activeSection.slides.length - 1 ? activeSlideIndex + 1 : 0
-                          )
-                        }
-                        className="sap-btn-primary py-1 text-sm"
-                      >
-                        Next
-                      </button>
-                      <button
-                        onClick={() => void exitFullscreen()}
-                        className="sap-btn-secondary py-1 text-sm inline-flex items-center gap-1.5"
-                      >
-                        <Minimize className="w-3.5 h-3.5" />
-                        Exit Full Screen
-                      </button>
-                    </div>
-                  )}
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-semibold text-foreground">{browseProgressLabel}</p>
                     <div className="flex items-center gap-2">
@@ -441,6 +417,50 @@ export default function App() {
                         ? 'Audio is playing for this slide. You can navigate anytime.'
                         : 'Audio is optional. Click through silently or narrate live as needed.'}
                   </p>
+                </div>
+              )}
+              {viewMode === 'browse' && isFullscreenBrowse && (
+                <div className="mt-4 space-y-2">
+                  <div className="flex items-center justify-end gap-2">
+                    <button
+                      onClick={() =>
+                        handleSlideChange(
+                          activeSlideIndex > 0 ? activeSlideIndex - 1 : activeSection.slides.length - 1
+                        )
+                      }
+                      className="sap-btn-secondary py-1 text-sm"
+                    >
+                      Previous
+                    </button>
+                    <button
+                      onClick={() =>
+                        handleSlideChange(
+                          activeSlideIndex < activeSection.slides.length - 1 ? activeSlideIndex + 1 : 0
+                        )
+                      }
+                      className="sap-btn-primary py-1 text-sm"
+                    >
+                      Next
+                    </button>
+                  </div>
+                  <div className="flex items-center justify-end gap-2">
+                    <button
+                      onClick={() => {
+                        stopAudio();
+                        setViewMode('watch');
+                      }}
+                      className="sap-btn-secondary py-1 text-sm"
+                    >
+                      Back to Video View
+                    </button>
+                    <button
+                      onClick={() => void exitFullscreen()}
+                      className="sap-btn-secondary py-1 text-sm inline-flex items-center gap-1.5"
+                    >
+                      <Minimize className="w-3.5 h-3.5" />
+                      Exit Full Screen
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
