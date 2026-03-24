@@ -42,7 +42,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
     audience: 'Plant Managers & Operations Teams',
     description:
       'Section 1 walkthrough content with uploaded slides. Notes and per-slide narration can be added once available.',
-    watchVideoUrl: '/Section 1 Video.mp4',
+    watchVideoUrl: 'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20Video.mp4',
     slides: [
       {
         mediaUrl: '/Section 1 - Slide 1.png',
@@ -53,7 +53,8 @@ export const DEMO_SECTIONS: DemoSection[] = [
         ],
       },
       {
-        mediaUrl: '/Section 1 - Slide 2.mp4',
+        mediaUrl:
+          'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%202.mp4',
         mediaType: 'video',
         bullets: [
           'Video slide plays automatically when this slide is active.',
@@ -69,7 +70,8 @@ export const DEMO_SECTIONS: DemoSection[] = [
         ],
       },
       {
-        mediaUrl: '/Section 1 - Slide 4.mp4',
+        mediaUrl:
+          'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%204.mp4',
         mediaType: 'video',
         bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
       },
@@ -89,7 +91,8 @@ export const DEMO_SECTIONS: DemoSection[] = [
         bullets: ['Slide content uploaded.', 'Narration notes pending.'],
       },
       {
-        mediaUrl: '/Section 1 - Slide 8.mp4',
+        mediaUrl:
+          'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%208.mp4',
         mediaType: 'video',
         bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
       },
@@ -99,22 +102,26 @@ export const DEMO_SECTIONS: DemoSection[] = [
         bullets: ['Slide content uploaded.', 'Narration notes pending.'],
       },
       {
-        mediaUrl: '/Section 1 - Slide 10.mp4',
+        mediaUrl:
+          'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%2010.mp4',
         mediaType: 'video',
         bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
       },
       {
-        mediaUrl: '/Section 1 - Slide 11.mp4',
+        mediaUrl:
+          'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%2011.mp4',
         mediaType: 'video',
         bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
       },
       {
-        mediaUrl: '/Section 1 - Slide 12.mp4',
+        mediaUrl:
+          'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%2012.mp4',
         mediaType: 'video',
         bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
       },
       {
-        mediaUrl: '/Section 1 - Slide 13.mp4',
+        mediaUrl:
+          'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%2013.mp4',
         mediaType: 'video',
         bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
       },
