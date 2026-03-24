@@ -11,6 +11,7 @@ import {
   User,
   Info,
   Volume2,
+  ChevronRight,
 } from 'lucide-react';
 import { DEMO_SECTIONS, VIEW_MODES, type DemoSection } from './data/demo-content';
 import { cn } from './lib/utils';
@@ -371,6 +372,26 @@ export default function App() {
                       </button>
                     </div>
                     <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+                      {hasSlideAudio && (
+                        <>
+                          <button
+                            onClick={restartSlideAudio}
+                            className="sap-btn-secondary py-1 text-sm inline-flex items-center gap-1.5"
+                            aria-label="Restart slide audio from beginning"
+                            title="Restart audio from beginning"
+                          >
+                            <RotateCcw className="w-3.5 h-3.5" />
+                            Restart Audio
+                          </button>
+                          <button
+                            onClick={isAudioPlaying ? pauseSlideAudio : () => playSlideAudio()}
+                            className="sap-btn-primary py-1 text-sm inline-flex items-center gap-1.5"
+                          >
+                            {isAudioPlaying ? <Pause className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                            {isAudioPlaying ? 'Pause Audio' : 'Play Audio'}
+                          </button>
+                        </>
+                      )}
                       <button
                         onClick={() => {
                           stopAudio();
@@ -450,7 +471,17 @@ export default function App() {
           </div>
 
           {showFullscreenNotesPanel && (
-          <div className="w-full lg:w-96 flex flex-col p-8 bg-card">
+          <div className="relative w-full lg:w-96 flex flex-col p-8 bg-card">
+            {isFullscreenBrowse && (
+              <button
+                onClick={() => setIsFullscreenNotesHidden(true)}
+                className="absolute -left-4 top-4 z-10 h-8 w-8 rounded-full border border-border bg-card text-muted-foreground shadow-md transition hover:text-foreground hover:bg-secondary inline-flex items-center justify-center"
+                aria-label="Hide notes panel"
+                title="Hide notes panel"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            )}
             <div className="flex-1 space-y-6">
               {!isFullscreenBrowse && (
                 <>
