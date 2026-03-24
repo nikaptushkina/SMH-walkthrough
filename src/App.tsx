@@ -24,6 +24,7 @@ export default function App() {
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [mediaIssue, setMediaIssue] = useState<string | null>(null);
+  const [isFullscreenNotesHidden, setIsFullscreenNotesHidden] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const activeAudioUrlRef = useRef<string | null>(null);
@@ -33,6 +34,7 @@ export default function App() {
   const activeSlideIndex = slideIndexBySection[activeSection.id] ?? 0;
   const activeSlide = activeSection.slides[activeSlideIndex];
   const isFullscreenBrowse = viewMode === 'browse' && isFullscreen;
+  const showFullscreenNotesPanel = !(isFullscreenBrowse && isFullscreenNotesHidden);
   const resolveMediaUrl = (url: string) => {
     if (/^(https?:)?\/\//.test(url) || url.startsWith('data:') || url.startsWith('blob:')) {
       return url;
@@ -79,6 +81,14 @@ export default function App() {
     if (nextSection) {
       handleSectionChange(nextSection);
     }
+  };
+
+    const goToPreviousSlide = () => {
+    handleSlideChange(activeSlideIndex > 0 ? activeSlideIndex - 1 : activeSection.slides.length - 1);
+  };
+
+  const goToNextSlide = () => {
+    handleSlideChange(activeSlideIndex < activeSection.slides.length - 1 ? activeSlideIndex + 1 : 0);
   };
 
   const browseProgressLabel = useMemo(
@@ -171,6 +181,12 @@ export default function App() {
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
     };
   }, []);
+
+  useEffect(() => {
+    if (!isFullscreenBrowse) {
+      setIsFullscreenNotesHidden(false);
+    }
+  }, [isFullscreenBrowse]);
 
   useEffect(() => {
     const activeMediaUrl = viewMode === 'browse' ? activeSlide.mediaUrl : activeSection.watchVideoUrl;
@@ -334,6 +350,53 @@ export default function App() {
                     />
                   )}
                 </div>
+                {isFullscreenBrowse && (
+                  <>
+                    <div className="pointer-events-none absolute inset-y-0 left-0 right-0 flex items-center justify-between px-4">
+                      <button
+                        onClick={goToPreviousSlide}
+                        className="pointer-events-auto sap-btn-secondary h-10 w-10 rounded-full p-0 inline-flex items-center justify-center"
+                        aria-label="Go to previous slide"
+                        title="Previous slide"
+                      >
+                        <ArrowLeft className="w-5 h-5" />
+                      </button>
+                      <button
+                        onClick={goToNextSlide}
+                        className="pointer-events-auto sap-btn-secondary h-10 w-10 rounded-full p-0 inline-flex items-center justify-center"
+                        aria-label="Go to next slide"
+                        title="Next slide"
+                      >
+                        <ArrowRight className="w-5 h-5" />
+                      </button>
+                    </div>
+                    <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+                      <button
+                        onClick={() => {
+                          stopAudio();
+                          setViewMode('watch');
+                        }}
+                        className="sap-btn-secondary py-1 text-sm inline-flex items-center gap-1.5"
+                      >
+                        <ArrowLeft className="w-3.5 h-3.5" />
+                        Back to Video View
+                      </button>
+                      <button
+                        onClick={() => void exitFullscreen()}
+                        className="sap-btn-secondary py-1 text-sm inline-flex items-center gap-1.5"
+                      >
+                        <Minimize className="w-3.5 h-3.5" />
+                        Exit Full Screen
+                      </button>
+                      <button
+                        onClick={() => setIsFullscreenNotesHidden((prev) => !prev)}
+                        className="sap-btn-secondary py-1 text-sm"
+                      >
+                        {isFullscreenNotesHidden ? 'Show Notes Panel' : 'Hide Notes Panel'}
+                      </button>
+                    </div>
+                  </>
+                )}
                 <div className="mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-secondary/70 px-3 py-1.5">
                   {activeSection.slides.map((_, index) => (
                     <button
@@ -355,24 +418,10 @@ export default function App() {
 
                 {!isFullscreenBrowse && (
                   <div className="mt-4 flex gap-4">
-                    <button
-                      onClick={() =>
-                        handleSlideChange(
-                          activeSlideIndex > 0 ? activeSlideIndex - 1 : activeSection.slides.length - 1
-                        )
-                      }
-                      className="sap-btn-secondary py-1 text-sm"
-                    >
+                    <button onClick={goToPreviousSlide} className="sap-btn-secondary py-1 text-sm">
                       Previous
                     </button>
-                    <button
-                      onClick={() =>
-                        handleSlideChange(
-                          activeSlideIndex < activeSection.slides.length - 1 ? activeSlideIndex + 1 : 0
-                        )
-                      }
-                      className="sap-btn-primary py-1 text-sm"
-                    >
+                    <button onClick={goToNextSlide} className="sap-btn-primary py-1 text-sm">
                       Next
                     </button>
                   </div>
@@ -400,6 +449,7 @@ export default function App() {
             )}
           </div>
 
+          {showFullscreenNotesPanel && (
           <div className="w-full lg:w-96 flex flex-col p-8 bg-card">
             <div className="flex-1 space-y-6">
               {!isFullscreenBrowse && (
@@ -489,51 +539,6 @@ export default function App() {
                   </p>
                 </div>
               )}
-              {viewMode === 'browse' && isFullscreenBrowse && (
-                <div className="mt-4 space-y-2">
-                  <div className="flex items-center justify-center gap-2">
-                    <button
-                      onClick={() =>
-                        handleSlideChange(
-                          activeSlideIndex > 0 ? activeSlideIndex - 1 : activeSection.slides.length - 1
-                        )
-                      }
-                      className="sap-btn-secondary py-1 text-sm"
-                    >
-                      Previous
-                    </button>
-                    <button
-                      onClick={() =>
-                        handleSlideChange(
-                          activeSlideIndex < activeSection.slides.length - 1 ? activeSlideIndex + 1 : 0
-                        )
-                      }
-                      className="sap-btn-primary py-1 text-sm"
-                    >
-                      Next
-                    </button>
-                  </div>
-                  <div className="flex items-center justify-center gap-2">
-                    <button
-                      onClick={() => {
-                        stopAudio();
-                        setViewMode('watch');
-                      }}
-                      className="sap-btn-secondary py-1 text-sm inline-flex items-center gap-1.5"
-                    >
-                      <ArrowLeft className="w-3.5 h-3.5" />
-                      Back to Video View
-                    </button>
-                    <button
-                      onClick={() => void exitFullscreen()}
-                      className="sap-btn-secondary py-1 text-sm inline-flex items-center gap-1.5"
-                    >
-                      <Minimize className="w-3.5 h-3.5" />
-                      Exit Full Screen
-                    </button>
-                  </div>
-                </div>
-              )}
             </div>
 
             {!isFullscreenBrowse && (
@@ -553,6 +558,7 @@ export default function App() {
               </div>
             )}
           </div>
+          )}
         </div>
       </main>
 
