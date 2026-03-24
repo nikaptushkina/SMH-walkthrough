@@ -140,37 +140,34 @@ export const DEMO_SECTIONS: DemoSection[] = [
     audience: 'Turning manufacturing data into cost insight',
     description:
       'See how the manufacturing data foundation created by SMH is applied to Product Costing. This section introduces SAP Joule as a natural‑language interface, working with PDF Operational Product Costing analytics, to help users understand cost drivers, variances, and business impact more quickly.',
-    watchVideoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    watchVideoUrl:
+      'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%202%20Video.mp4',
     slides: [
       {
-        mediaUrl:
-          'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200',
+        mediaUrl: '/Section 2 - Slide 1.png',
         mediaType: 'image',
-        bullets: [
-          'Cost rollups combine labor, material, and overhead by product family.',
-          'Users can analyze cost variance between planned and actual production.',
-        ],
-        audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
+        bullets: ['Slide content uploaded.', 'Narration notes pending.'],
+      },
+      {
+        mediaUrl: '/Section 2 - Slide 2.png',
+        mediaType: 'image',
+        bullets: ['Slide content uploaded.', 'Narration notes pending.'],
       },
       {
         mediaUrl:
-          'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200',
-        mediaType: 'image',
-        bullets: [
-          'Scenario comparisons reveal margin impact before changing production mix.',
-          'Finance and operations teams share the same costing assumptions.',
-        ],
-        audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
+          'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%202%20-%20Slide%203.mp4',
+        mediaType: 'video',
+        bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
       },
       {
-        mediaUrl:
-          'https://images.unsplash.com/photo-1543286386-2e659306cd6c?auto=format&fit=crop&q=80&w=1200',
+        mediaUrl: '/Section 2 - Slide 4.png',
         mediaType: 'image',
-        bullets: [
-          'Leaders can prioritize orders based on profitability and capacity constraints.',
-          'Cost transparency supports strategic negotiation with suppliers and customers.',
-        ],
-        audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
+        bullets: ['Slide content uploaded.', 'Narration notes pending.'],
+      },
+      {
+        mediaUrl: '/Section 2 - Slide 5.png',
+        mediaType: 'image',
+        bullets: ['Slide content uploaded.', 'Narration notes pending.'],
       },
     ],
     nextSectionId: 'deep-dive',
