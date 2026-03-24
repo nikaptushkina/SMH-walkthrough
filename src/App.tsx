@@ -1,5 +1,15 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Play, Image as ImageIcon, ArrowRight, User, Info, Volume2 } from 'lucide-react';
+import {
+  Play,
+  Pause,
+  Maximize,
+  Minimize,
+  Image as ImageIcon,
+  ArrowRight,
+  User,
+  Info,
+  Volume2,
+} from 'lucide-react';
 import { DEMO_SECTIONS, VIEW_MODES, type DemoSection } from './data/demo-content';
 import { cn } from './lib/utils';
 
@@ -10,8 +20,12 @@ export default function App() {
     Object.fromEntries(DEMO_SECTIONS.map((section) => [section.id, 0]))
   );
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const activeAudioUrlRef = useRef<string | null>(null);
+  const demoCardRef = useRef<HTMLDivElement | null>(null);
+  const mediaFrameRef = useRef<HTMLDivElement | null>(null);
 
   const activeSlideIndex = slideIndexBySection[activeSection.id] ?? 0;
   const activeSlide = activeSection.slides[activeSlideIndex];
@@ -21,6 +35,7 @@ export default function App() {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
+    activeAudioUrlRef.current = null;
     setIsAudioPlaying(false);
   };
 
@@ -54,12 +69,24 @@ export default function App() {
       return;
     }
 
+    if (
+      audioRef.current &&
+      activeAudioUrlRef.current === activeSlide.audioUrl &&
+      audioRef.current.paused
+    ) {
+      void audioRef.current.play();
+      setIsAudioPlaying(true);
+      return;
+    }
+
     if (audioRef.current) {
       audioRef.current.pause();
+      audioRef.current.currentTime = 0;
     }
 
     const audio = new Audio(activeSlide.audioUrl);
     audioRef.current = audio;
+    activeAudioUrlRef.current = activeSlide.audioUrl;
     setIsAudioPlaying(true);
 
     audio.onended = () => setIsAudioPlaying(false);
@@ -68,11 +95,41 @@ export default function App() {
     void audio.play();
   };
 
+  const pauseSlideAudio = () => {
+    if (!audioRef.current) {
+      return;
+    }
+
+    audioRef.current.pause();
+    setIsAudioPlaying(false);
+  };
+
+  const toggleFullscreen = async () => {
+    const fullscreenTarget = viewMode === 'browse' ? demoCardRef.current : mediaFrameRef.current;
+    if (!fullscreenTarget) {
+      return;
+    }
+
+    if (document.fullscreenElement) {
+      await document.exitFullscreen();
+      return;
+    }
+
+    await fullscreenTarget.requestFullscreen();
+  };
+
   useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(Boolean(document.fullscreenElement));
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
       }
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
     };
   }, []);
 
@@ -122,10 +179,21 @@ export default function App() {
         </div>
 
         <div
+          ref={demoCardRef}
           key={activeSection.id}
           className="sap-card p-0 min-h-[600px] flex flex-col lg:flex-row bg-card animate-in"
         >
-          <div className="flex-1 border-b lg:border-b-0 lg:border-r border-border bg-black/5 relative aspect-video lg:aspect-auto">
+          <div
+            ref={mediaFrameRef}
+            className="flex-1 border-b lg:border-b-0 lg:border-r border-border bg-black/5 relative aspect-video lg:aspect-auto"
+          >
+            <button
+              onClick={() => void toggleFullscreen()}
+              className="absolute top-3 right-3 z-10 sap-btn-secondary py-1 text-xs inline-flex items-center gap-1.5"
+            >
+              {isFullscreen ? <Minimize className="w-3.5 h-3.5" /> : <Maximize className="w-3.5 h-3.5" />}
+              {isFullscreen ? 'Exit Full Screen' : 'Full Screen'}
+            </button>
             {viewMode === 'browse' ? (
               <div className="h-full flex flex-col items-center justify-center p-4">
                 <div className="relative w-full max-w-4xl aspect-video rounded-lg overflow-hidden shadow-2xl border border-border bg-card">
@@ -230,11 +298,11 @@ export default function App() {
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-semibold text-foreground">{browseProgressLabel}</p>
                     <button
-                      onClick={playSlideAudio}
+                      onClick={isAudioPlaying ? pauseSlideAudio : playSlideAudio}
                       className="sap-btn-primary py-1.5 text-sm inline-flex items-center gap-2"
                     >
-                      <Volume2 className="w-4 h-4" />
-                      🔊 Play Audio
+                      {isAudioPlaying ? <Pause className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                      {isAudioPlaying ? '⏸ Pause Audio' : '🔊 Play Audio'}
                     </button>
                   </div>
 
