@@ -41,7 +41,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
     title: 'Sapience Manufacturing Hub Overview',
     audience: 'Connecting the Shop Floor to the Top Floor',
     description:
-      'Explore the manufacturing data challenge and how Sapience Manufacturing Hub brings operational data from the shop floor into SAP as a consistent, standardized foundation. This section explains why traditional ERP falls short and how SMH enables trusted, finance‑ready manufacturing data across complex semiconductor environments.',
+      'Understand the manufacturing data challenge and how Sapience Manufacturing Hub creates a consistent, finance‑ready data foundation for SAP.',
     watchVideoUrl: 'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20Video.mp4',
     slides: [
       {
@@ -144,7 +144,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
     title: 'Product Costing with SAP Joule',
     audience: 'Turning manufacturing data into cost insight',
     description:
-      'See how the manufacturing data foundation created by SMH is applied to Product Costing. This section introduces SAP Joule as a natural‑language interface, working with PDF Operational Product Costing analytics, to help users understand cost drivers, variances, and business impact more quickly.',
+      'See how the manufacturing data foundation created by SMH is applied to Product Costing using SAP Joule and PDF Operational Product Costing analytics.',
     watchVideoUrl:
       'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%202%20Video.mp4',
     slides: [
@@ -183,7 +183,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
     title: 'Deep Dive: How SAP, SMH, and Operational Product Costing Work Together',
     audience: 'An in‑depth look at data, analytics, and AI in action',
     description:
-      'Dive deeper into the end‑to‑end flow between SAP, Sapience Manufacturing Hub, and PDF Operational Product Costing. This section walks through the detailed demo experience, showing how manufacturing events are aggregated, analyzed, and transformed into actionable insights using SAP Joule.',
+      'Explore the end‑to‑end flow between SAP, Sapience Manufacturing Hub, and PDF Operational Product Costing in a detailed demo walkthrough.',
     watchVideoUrl:
       'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%203%20Video.mp4',
     slides: [
