@@ -4,6 +4,7 @@ import {
   Pause,
   Maximize,
   Minimize,
+  ArrowLeft,
   RotateCcw,
   Image as ImageIcon,
   ArrowRight,
@@ -222,22 +223,22 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header className="bg-card border-b border-border sticky top-0 z-50 shadow-sm">
-        <div className="px-6 py-4 flex flex-col gap-3">
-          <div className="inline-flex items-center gap-4 self-start rounded-lg border border-border bg-background px-4 py-2">
+      <header className="sticky top-0 z-50 border-b border-primary/15 bg-gradient-to-r from-sky-50 via-indigo-50 to-violet-50 shadow-sm backdrop-blur">
+        <div className="px-6 py-4 flex items-center gap-4 md:gap-6 flex-wrap">
+          <div className="inline-flex items-center gap-3 self-start rounded-full border border-primary/20 bg-white/90 px-4 py-2 shadow-sm">
             <img
               src={pdfLogoUrl}
               alt="PDF logo"
-              className="h-8 w-auto object-contain"
+              className="h-5 w-auto object-contain"
             />
-            <div className="h-8 w-px bg-border" aria-hidden="true" />
+            <div className="h-6 w-px bg-gradient-to-b from-transparent via-primary/50 to-transparent" aria-hidden="true" />
             <img
               src={sapLogoUrl}
               alt="SAP logo"
               className="h-8 w-auto object-contain"
             />
           </div>
-          <h1 className="text-lg font-semibold tracking-tight text-foreground">
+          <h1 className="text-base md:text-lg font-semibold tracking-tight text-foreground">
             From Shop Floor to Top Floor: Connecting Sapience Manufacturing Hub & Joule
           </h1>
         </div>
@@ -332,19 +333,19 @@ export default function App() {
                       className="w-full h-full object-contain transition-opacity duration-500"
                     />
                   )}
-                  <div className="absolute bottom-4 right-4 flex gap-2">
-                    {activeSection.slides.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => handleSlideChange(index)}
-                        className={cn(
-                          'w-2.5 h-2.5 rounded-full transition-all',
-                          activeSlideIndex === index ? 'bg-primary w-6' : 'bg-primary/30'
-                        )}
-                        aria-label={`Go to slide ${index + 1}`}
-                      />
-                    ))}
-                  </div>
+                </div>
+                <div className="mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-secondary/70 px-3 py-1.5">
+                  {activeSection.slides.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleSlideChange(index)}
+                      className={cn(
+                        'h-2.5 w-2.5 rounded-full transition-all',
+                        activeSlideIndex === index ? 'bg-primary w-6' : 'bg-primary/30 hover:bg-primary/50'
+                      )}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
                 </div>
                 {mediaIssue && (
                   <div className="mt-3 w-full max-w-4xl rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">
@@ -518,8 +519,9 @@ export default function App() {
                         stopAudio();
                         setViewMode('watch');
                       }}
-                      className="sap-btn-secondary py-1 text-sm"
+                      className="sap-btn-secondary py-1 text-sm inline-flex items-center gap-1.5"
                     >
+                      <ArrowLeft className="w-3.5 h-3.5" />
                       Back to Video View
                     </button>
                     <button
