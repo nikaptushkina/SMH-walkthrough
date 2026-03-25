@@ -362,7 +362,7 @@ export default function App() {
               <div
                 className={cn(
                   'h-full flex flex-col items-center justify-center p-4',
-                  isFullscreen && (isFullscreenNotesHidden ? 'p-0' : 'p-0')
+                  isFullscreen && (isFullscreenNotesHidden ? 'p-0' : 'p-8')
                 )}
               >
                 {isFullscreenBrowse && isFullscreenNotesHidden && (
@@ -377,7 +377,8 @@ export default function App() {
                 )}
                 <div
                   className={cn(
-                    'relative w-full max-w-4xl aspect-video rounded-lg overflow-hidden shadow-2xl border border-border bg-card',
+                    'relative w-full aspect-video rounded-lg overflow-hidden shadow-2xl border border-border bg-card',
+                    !isFullscreen && 'max-w-4xl',
                     isFullscreen &&
                       'max-h-[calc(100vh-10rem)] rounded-lg shadow-2xl border border-border',
                     isFullscreen && !isFullscreenNotesHidden && 'max-w-[min(92vw,1600px)]',
