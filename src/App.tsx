@@ -362,7 +362,7 @@ export default function App() {
               <div
                 className={cn(
                   'h-full flex flex-col items-center justify-center p-4',
-                  isFullscreen && (isFullscreenNotesHidden ? 'p-0' : 'p-8')
+                  isFullscreen && (isFullscreenNotesHidden ? 'p-0 justify-start overflow-auto' : 'p-8')
                 )}
               >
                 {isFullscreenBrowse && isFullscreenNotesHidden && (
@@ -385,7 +385,7 @@ export default function App() {
                     isFullscreen && !isFullscreenNotesHidden && 'max-w-[min(92vw,1600px)]',
                     isFullscreen &&
                       isFullscreenNotesHidden &&
-                      'w-auto max-w-full max-h-[100vh] aspect-auto overflow-visible border-0 bg-transparent shadow-none'
+                      'w-auto max-w-full max-h-[calc(100vh-9rem)] aspect-auto overflow-visible border-0 bg-transparent shadow-none'
                   )}
                 >
                   {activeSlide.mediaType === 'video' ? (
@@ -396,7 +396,7 @@ export default function App() {
                       className={cn(
                         'object-contain',
                         isFullscreen && isFullscreenNotesHidden
-                          ? 'w-auto max-w-full max-h-[100vh] h-auto rounded-lg'
+                          ? 'w-auto max-w-full max-h-[calc(100vh-9rem)] h-auto rounded-lg'
                           : 'w-full h-full'
                       )}
                       autoPlay
@@ -412,7 +412,7 @@ export default function App() {
                       className={cn(
                         'object-contain transition-opacity duration-500',
                         isFullscreen && isFullscreenNotesHidden
-                          ? 'w-auto max-w-full max-h-[100vh] h-auto rounded-lg'
+                          ? 'w-auto max-w-full max-h-[calc(100vh-9rem)] h-auto rounded-lg'
                           : 'w-full h-full'
                       )}
                     />
