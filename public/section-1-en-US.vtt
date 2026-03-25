@@ -1,0 +1,73 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.000
+PDF Solutions in SAP, connecting the shop floor to the top floor.
+
+00:00:05.000 --> 00:00:11.000
+Every yield point, material choice, and cycle hour on the shop floor ultimately lands in finance.
+
+00:00:11.000 --> 00:00:16.000
+The question is, can your business see and act on that linkage in time?
+
+00:00:16.000 --> 00:00:27.000
+Semiconductor manufacturing spans thousands of tightly sequenced steps across hundreds of tools over many months, but ERP systems only capture a summarized view of that complexity.
+
+00:00:27.000 --> 00:00:35.000
+In reality, data lives in many different places across equipment, MES, manufacturing data repositories, test systems, and the supply chain.
+
+00:00:35.000 --> 00:00:45.000
+Because these signals are not connected, ERP receives only fragments, making it difficult to see and act on the true financial impact of shop-floor activity.
+
+00:00:45.000 --> 00:00:51.000
+PDF Solutions and SAP partner to bring financial and operational data together.
+
+00:00:51.000 --> 00:00:58.000
+This allows manufacturers to deploy proven use cases quickly and realize return on investment from day one.
+
+00:00:58.000 --> 01:11:000
+At the center is Sapience Manufacturing Hub, a unified interface and centralized operational data layer that connects any MES, equipment source, or factory system with SAP S/4HANA.
+
+01:11.000 --> 01:20.000
+By bringing this manufacturing data together, SMH creates a consistent, standardized operational foundation for SAP S/4HANA.
+
+01:20.000 --> 01:26.000
+SMH is an enterprise integration platform that connects factory systems to SAP.
+
+01:26.000 --> 01:36.000
+It standardizes events from MES and equipment, applies semantic rules, and registers the right milestones back into SAP S/4HANA in a finance-ready format.
+
+01:36.000 --> 01:43.000
+ERP and MES operate at different levels of granularity, and manufacturing data often comes from multiple sources.
+
+01:43.000 --> 01:52.000
+SMH reconciles these differences and aggregates events into a single, consistent source of truth that flows cleanly into SAP.
+
+01:52.000 --> 01:59.000
+Semiconductor lots do not move in a straight line.
+
+01:59.000 --> 02:09.000
+They often split, merge, or rework as they travel through the fab, and SMH keeps SAP production orders, batches, and confirmations consistent even when manufacturing paths diverge.
+
+02:09.000 --> 02:17.000
+Here is how this works in practice. SAP S/4HANA generates a production order that is ready to be consumed on the shop floor.
+
+02:17.000 --> 02:27.000
+SMH picks up that order, creates the corresponding manufacturing lot, and routes the right operational data to MES as production begins.
+
+02:27.000 --> 02:35.000
+As production progresses, SMH captures key events from MES and aggregates thousands of detailed steps into clean milestone updates.
+
+02:35.000 --> 02:45.000
+These routes are configured with reusable components, ensuring data flows into SAP in a consistent, finance-ready format.
+
+02:45.000 --> 02:54.000
+Using Sapience Manufacturing Hub, manufacturers reduce interface build and maintenance costs, accelerate deployments, and achieve tighter traceability and throughput.
+
+02:54.000 --> 03:09.000
+SMH provides a unified, standardized source of manufacturing data across factory systems, ensuring SAP has complete and consistent production data across every site and MES environment.
+
+03:09.000 --> 03:22.000
+By bringing this manufacturing data together, SMH creates a consistent foundation for high-value solutions such as product costing, sustainability analytics, lot genealogy, and cost of yield.
+
+03:22.000 --> 03:26.000
+Now let’s see how that foundation gets used.

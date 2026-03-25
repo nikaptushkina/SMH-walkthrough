@@ -30,6 +30,7 @@ export interface DemoSection {
   audience: string;
   description: string;
   watchVideoUrl: string;
+  watchCaptionsUrl?: string;
   slides: Slide[];
   nextSectionId?: string;
   nextSectionLabel?: string;
@@ -43,6 +44,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
     description:
       'Understand the manufacturing data challenge and how Sapience Manufacturing Hub creates a consistent, finance‑ready data foundation for SAP.',
     watchVideoUrl: 'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20Video.mp4',
+    watchCaptionsUrl: '/section-1-en-US.vtt',
     slides: [
       {
         mediaUrl: '/Section 1 - Slide 1.png',
@@ -147,6 +149,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
       'See how the manufacturing data foundation created by SMH is applied to Product Costing using SAP Joule and PDF Operational Product Costing analytics.',
     watchVideoUrl:
       'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%202%20Video.mp4',
+    watchCaptionsUrl: '/section-2-en-US.vtt',
     slides: [
       {
         mediaUrl: '/Section 2 - Slide 1.png',
@@ -191,6 +194,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
       'Explore the end‑to‑end flow between SAP, Sapience Manufacturing Hub, and PDF Operational Product Costing in a detailed demo walkthrough.',
     watchVideoUrl:
       'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%203%20Video.mp4',
+    watchCaptionsUrl: '/section-3-en-US.vtt',
     slides: [
       {
         mediaUrl: '/Section 3 - Slide 1.png',

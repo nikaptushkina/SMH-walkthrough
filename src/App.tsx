@@ -54,6 +54,9 @@ export default function App() {
   };
   const activeSlideMediaUrl = resolveMediaUrl(activeSlide.mediaUrl);
   const activeSectionWatchUrl = resolveMediaUrl(activeSection.watchVideoUrl);
+  const activeSectionCaptionsUrl = activeSection.watchCaptionsUrl
+    ? resolveMediaUrl(activeSection.watchCaptionsUrl)
+    : undefined;
   const pdfLogoUrl = resolveMediaUrl('/favicon.svg');
   const sapLogoUrl = resolveMediaUrl('/SAP_2011_logo.svg');
   const isLocalAssetUrl = (url: string) =>
@@ -415,16 +418,16 @@ export default function App() {
                   )}
                 >
                   {activeSlide.mediaType === 'video' ? (
-                    <video
-                      ref={browseVideoRef}
-                      key={activeSlideMediaUrl}
-                      src={activeSlideMediaUrl}
-                      className={cn(
-                        'object-contain',
-                        isFullscreen && isFullscreenNotesHidden
-                          ? 'h-screen w-screen max-h-none max-w-none rounded-none'
-                          : 'w-full h-full'
-                      )}
+	                    <video
+	                      ref={browseVideoRef}
+	                      key={activeSlideMediaUrl}
+	                      src={activeSlideMediaUrl}
+	                      className={cn(
+	                        'demo-video object-contain',
+	                        isFullscreen && isFullscreenNotesHidden
+	                          ? 'h-screen w-screen max-h-none max-w-none rounded-none'
+	                          : 'w-full h-full'
+	                      )}
                       autoPlay
                       loop
                       muted
@@ -596,10 +599,20 @@ export default function App() {
                 <video
                   key={activeSectionWatchUrl}
                   src={activeSectionWatchUrl}
-                  className="w-full h-full"
+                  className="demo-video w-full h-full"
                   controls
                   playsInline
-                />
+                >
+                  {activeSectionCaptionsUrl && (
+                    <track
+                      kind="captions"
+                      src={activeSectionCaptionsUrl}
+                      srcLang="en-US"
+                      label="English (US)"
+                      default
+                    />
+                  )}
+                </video>
               )
             )}
           </div>
