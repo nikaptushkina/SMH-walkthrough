@@ -362,7 +362,7 @@ export default function App() {
               <div
                 className={cn(
                   'h-full flex flex-col items-center justify-center p-4',
-                  isFullscreen && (isFullscreenNotesHidden ? 'p-0' : 'p-8')
+                  isFullscreen && (isFullscreenNotesHidden ? 'p-0' : 'p-0')
                 )}
               >
                 {isFullscreenBrowse && isFullscreenNotesHidden && (
