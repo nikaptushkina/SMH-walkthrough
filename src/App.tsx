@@ -466,7 +466,7 @@ export default function App() {
                     </div>
                     <div
                       className={cn(
-                        'left-1/2 z-30 w-[min(94vw,980px)] max-w-[calc(100%-1.25rem)] -translate-x-1/2 rounded-2xl border border-white/55 bg-white/35 px-4 py-2 shadow-md backdrop-blur-md transition-all duration-200',
+                        'left-1/2 z-30 w-max max-w-[calc(100%-1.25rem)] -translate-x-1/2 rounded-2xl border border-white/55 bg-white/35 px-2 py-2 shadow-md backdrop-blur-md transition-all duration-200',
                         isFullscreenNotesHidden
                           ? 'fixed'
                           : 'absolute',
