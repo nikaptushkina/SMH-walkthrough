@@ -1,0 +1,25 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.000
+Today, we will focus on product costing.
+
+00:00:03.000 --> 00:00:12.000
+Now that SMH ensures SAP has complete and consistent production data, the next step is making use of that data by turning it into insights.
+
+00:00:12.000 --> 00:00:15.000
+And that is where SAP Joule comes in.
+
+00:00:15.000 --> 00:00:23.000
+Once operational data is integrated into SAP, organizations can unlock a new level of intelligence using SAP Joule.
+
+00:00:23.000 --> 00:00:31.000
+Joule is SAP’s enterprise AI copilot, designed to help users quickly analyze business data and identify insights.
+
+00:00:31.000 --> 00:00:41.000
+By connecting SAP Joule with PDF Operational Product Costing analytics, users can instantly analyze manufacturing performance and product costing.
+
+00:00:41.000 --> 00:00:48.000
+Within seconds, Joule can identify key operational cost drivers and highlight the areas that require attention.
+
+00:00:48.000 --> 00:00:53.000
+Now let’s apply it. Using the Newest Product Costing Demo flow with real SAP Joule prompts and responses.
