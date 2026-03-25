@@ -377,14 +377,15 @@ export default function App() {
                 )}
                 <div
                   className={cn(
-                    'relative w-full aspect-video rounded-lg overflow-hidden shadow-2xl border border-border bg-card',
+                    'relative rounded-lg overflow-hidden shadow-2xl border border-border bg-card',
+                    !(isFullscreen && isFullscreenNotesHidden) && 'w-full aspect-video',
                     !isFullscreen && 'max-w-4xl',
                     isFullscreen &&
                       'max-h-[calc(100vh-10rem)] rounded-lg shadow-2xl border border-border',
                     isFullscreen && !isFullscreenNotesHidden && 'max-w-[min(92vw,1600px)]',
                     isFullscreen &&
                       isFullscreenNotesHidden &&
-                      'w-full max-w-full max-h-[100vh] rounded-lg border border-border bg-card shadow-2xl'
+                      'w-auto max-w-full max-h-[100vh] aspect-auto overflow-visible border-0 bg-transparent shadow-none'
                   )}
                 >
                   {activeSlide.mediaType === 'video' ? (
@@ -392,7 +393,12 @@ export default function App() {
                       ref={browseVideoRef}
                       key={activeSlideMediaUrl}
                       src={activeSlideMediaUrl}
-                      className="w-full h-full object-contain"
+                      className={cn(
+                        'object-contain',
+                        isFullscreen && isFullscreenNotesHidden
+                          ? 'w-auto max-w-full max-h-[100vh] h-auto rounded-lg'
+                          : 'w-full h-full'
+                      )}
                       autoPlay
                       loop
                       muted
@@ -403,7 +409,12 @@ export default function App() {
                     <img
                       src={activeSlideMediaUrl}
                       alt={`${activeSection.title} slide ${activeSlideIndex + 1}`}
-                      className="w-full h-full object-contain transition-opacity duration-500"
+                      className={cn(
+                        'object-contain transition-opacity duration-500',
+                        isFullscreen && isFullscreenNotesHidden
+                          ? 'w-auto max-w-full max-h-[100vh] h-auto rounded-lg'
+                          : 'w-full h-full'
+                      )}
                     />
                   )}
                 </div>
