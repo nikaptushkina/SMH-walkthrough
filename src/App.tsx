@@ -8,7 +8,7 @@ import {
   RotateCcw,
   Image as ImageIcon,
   ArrowRight,
-  User,
+  Lightbulb,
   Info,
   Volume2,
   ChevronRight,
@@ -276,7 +276,7 @@ export default function App() {
 
       <main className="flex-1 max-w-7xl mx-auto w-full p-6 lg:p-10 space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-in">
-          {DEMO_SECTIONS.map((section) => (
+          {DEMO_SECTIONS.map((section, index) => (
             <button
               key={section.id}
               onClick={() => handleSectionChange(section)}
@@ -294,11 +294,11 @@ export default function App() {
                     activeSection.id === section.id ? 'text-primary-foreground/80' : 'text-primary'
                   )}
                 >
-                  Section
+                  {`SECTION ${index + 1}`}
                 </span>
                 <h2 className="font-semibold text-base">{section.title}</h2>
                 <div className="flex items-center gap-1.5 mt-1">
-                  <User className="w-3.5 h-3.5" />
+                  <Lightbulb className="w-3.5 h-3.5" />
                   <span className="text-xs opacity-90">{section.audience}</span>
                 </div>
               </div>
@@ -335,7 +335,7 @@ export default function App() {
               <div
                 className={cn(
                   'h-full flex flex-col items-center justify-center p-4',
-                  isFullscreen && 'p-8'
+                  isFullscreen && (isFullscreenNotesHidden ? 'p-2' : 'p-8')
                 )}
               >
                 {isFullscreenBrowse && isFullscreenNotesHidden && (
@@ -352,7 +352,9 @@ export default function App() {
                   className={cn(
                     'relative w-full max-w-4xl aspect-video rounded-lg overflow-hidden shadow-2xl border border-border bg-card',
                     isFullscreen &&
-                      'max-w-[min(92vw,1600px)] max-h-[calc(100vh-10rem)] rounded-lg shadow-2xl border border-border'
+                      'max-h-[calc(100vh-10rem)] rounded-lg shadow-2xl border border-border',
+                    isFullscreen && !isFullscreenNotesHidden && 'max-w-[min(92vw,1600px)]',
+                    isFullscreen && isFullscreenNotesHidden && 'max-w-none'
                   )}
                 >
                   {activeSlide.mediaType === 'video' ? (

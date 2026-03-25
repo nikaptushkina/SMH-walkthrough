@@ -48,7 +48,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
         mediaUrl: '/Section 1 - Slide 1.png',
         audioUrl: '/Section 1 - Audio 1.mp3',
         mediaType: 'image',
-        bullets: ['Shop floor to top floor connection', 'PDF Solutions embedded in SAP'],
+        bullets: ['Shop floor to top floor connection', 'PDF Solutions & SAP'],
       },
       {
         mediaUrl:
@@ -86,54 +86,54 @@ export const DEMO_SECTIONS: DemoSection[] = [
         mediaUrl: '/Section 1 - Slide 7.png',
         audioUrl: '/Section 1 - Audio 7.mp3',
         mediaType: 'image',
-        bullets: ['PDF Solutions and SAP partnership', 'Operational and financial data unified', 'Faster use‑case deployment'],
+        bullets: ['PDF Solutions and SAP partnership', 'Financial and operational data unified', 'Faster deployment of proven use cases', 'ROI from day one', 'SMH introduced as unified data layer'],
       },
       {
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%208.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 8.mp3',
-        bullets: ['Unified interface for factory systems', 'Centralized operational data layer', 'MES and equipment connected to SAP S/4HANA'],
+        bullets: ['Enterprise integration platform', 'Connects factory systems to SAP', 'Manufacturing events standardized', 'Finance‑ready milestones created', 'Granularity differences reconciled', 'Single consistent source of truth'],
       },
       {
         mediaUrl: '/Section 1 - Slide 9.png',
         audioUrl: '/Section 1 - Audio 9.mp3',
         mediaType: 'image',
-        bullets: ['Manufacturing events standardized', 'Semantic alignment applied', 'Consistent data foundation in SAP'],
+        bullets: ['Manufacturing flows are non‑linear', 'Splits, merges, and rework are common', 'SAP production consistency maintained'],
       },
       {
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%2010.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 10.mp3',
-        bullets: ['Manufacturing workflows are non‑linear', 'Splits, merges, rework are common'],
+        bullets: ['End‑to‑end process example', 'SAP creates production order', 'Order ready for shop‑floor execution'],
       },
       {
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%2011.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 11.mp3',
-        bullets: ['Production order created in SAP', 'Prepared for shop-floor execution'],
+        bullets: ['SMH orchestrates production order', 'Manufacturing lot created', 'Operational data routed to MES', 'Execution begins'],
       },
       {
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%2012.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 12.mp3',
-        bullets: ['MES events captured during execution', 'Detailed steps aggregated into milestones'],
+        bullets: ['MES events captured during execution', 'Thousands of steps aggregated', 'Clean milestone updates sent to SAP', 'Reusable integration routes'],
       },
       {
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%201%20-%20Slide%2013.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 13.mp3',
-        bullets: ['Lower integration cost', 'Faster deployments', 'Improved traceability and throughput'],
+        bullets: ['Reduced interface build and maintenance cost', 'Faster deployments', 'Improved traceability', 'Higher operational throughput', 'Consistent manufacturing data across sites and MES'],
       },
       {
         mediaUrl: '/Section 1 - Slide 14.png',
         audioUrl: '/Section 1 - Audio 14.mp3',
         mediaType: 'image',
-        bullets: ['Unified manufacturing data foundation', 'Enables multiple business solutions'],
+        bullets: ['Unified manufacturing data foundation', 'Enables high‑value business solutions'],
       },
     ],
     nextSectionId: 'costing',
