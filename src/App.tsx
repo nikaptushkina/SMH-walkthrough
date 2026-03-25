@@ -383,7 +383,7 @@ export default function App() {
                     isFullscreen && !isFullscreenNotesHidden && 'max-w-[min(92vw,1600px)]',
                     isFullscreen &&
                       isFullscreenNotesHidden &&
-                      'h-full max-h-[100vh] max-w-none rounded-lg border border-border bg-card shadow-2xl'
+                      'max-h-[calc(100vh-2rem)] max-w-[min(98vw,1800px)] rounded-lg border border-border bg-card shadow-2xl'
                   )}
                 >
                   {activeSlide.mediaType === 'video' ? (
