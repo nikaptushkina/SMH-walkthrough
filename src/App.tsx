@@ -13,7 +13,6 @@ import {
   Volume2,
   ChevronRight,
   ChevronLeft,
-  ChevronUp,
 } from 'lucide-react';
 import { DEMO_SECTIONS, VIEW_MODES, type DemoSection } from './data/demo-content';
 import { cn } from './lib/utils';
@@ -412,7 +411,7 @@ export default function App() {
                     isFullscreen && !isFullscreenNotesHidden && 'max-w-[min(92vw,1600px)]',
                     isFullscreen &&
                       isFullscreenNotesHidden &&
-                      'h-screen w-screen max-h-none max-w-none aspect-auto overflow-hidden border-0 bg-transparent shadow-none rounded-none'
+                      'h-screen w-screen max-h-none max-w-none aspect-auto overflow-hidden border-0 bg-black shadow-none rounded-none flex items-center justify-center'
                   )}
                 >
                   {activeSlide.mediaType === 'video' ? (
@@ -467,7 +466,7 @@ export default function App() {
                     </div>
                     <div
                       className={cn(
-                        'left-1/2 z-30 -translate-x-1/2 rounded-2xl border border-white/60 bg-white/45 px-4 py-3 shadow-lg backdrop-blur-md transition-all duration-200',
+                        'left-1/2 z-30 -translate-x-1/2 rounded-xl border border-white/55 bg-white/35 px-3 py-1.5 shadow-md backdrop-blur-md transition-all duration-200',
                         isFullscreenNotesHidden
                           ? 'fixed'
                           : 'absolute',
@@ -481,12 +480,12 @@ export default function App() {
                           : 'pointer-events-auto translate-y-0 opacity-100'
                       )}
                     >
-                    <div className="flex flex-wrap items-center justify-center gap-2">
+                    <div className="flex items-center justify-center gap-1.5 whitespace-nowrap">
                       {hasSlideAudio && (
                         <>
                           <button
                             onClick={restartSlideAudio}
-                            className="sap-btn-secondary py-1 text-sm inline-flex items-center gap-1.5"
+                            className="sap-btn-secondary px-2.5 py-1 text-xs inline-flex items-center gap-1.5"
                             aria-label="Restart slide audio from beginning"
                             title="Restart audio from beginning"
                           >
@@ -495,7 +494,7 @@ export default function App() {
                           </button>
                           <button
                             onClick={isAudioPlaying ? pauseSlideAudio : () => playSlideAudio()}
-                            className="sap-btn-primary py-1 text-sm inline-flex items-center gap-1.5"
+                            className="sap-btn-primary px-2.5 py-1 text-xs inline-flex items-center gap-1.5"
                           >
                             {isAudioPlaying ? <Pause className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
                             {isAudioPlaying ? 'Pause Audio' : 'Play Audio'}
@@ -507,21 +506,21 @@ export default function App() {
                           stopAudio();
                           setViewMode('watch');
                         }}
-                        className="sap-btn-secondary py-1 text-sm inline-flex items-center gap-1.5"
+                        className="sap-btn-secondary px-2.5 py-1 text-xs inline-flex items-center gap-1.5"
                       >
                         <ArrowLeft className="w-3.5 h-3.5" />
                         Back to Video View
                       </button>
                       <button
                         onClick={() => void exitFullscreen()}
-                        className="sap-btn-secondary py-1 text-sm inline-flex items-center gap-1.5"
+                        className="sap-btn-secondary px-2.5 py-1 text-xs inline-flex items-center gap-1.5"
                       >
                         <Minimize className="w-3.5 h-3.5" />
                         Exit Full Screen
                       </button>
                       <button
                         onClick={() => setIsFullscreenNotesHidden((prev) => !prev)}
-                        className="sap-btn-secondary py-1 text-sm"
+                        className="sap-btn-secondary px-2.5 py-1 text-xs"
                       >
                         {isFullscreenNotesHidden ? 'Show Notes Panel' : 'Hide Notes Panel'}
                       </button>
@@ -531,7 +530,10 @@ export default function App() {
                 )}
                 <div
                   className={cn(
-                    'mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-secondary/70 px-3 py-1.5 transition-all duration-200',
+                    'inline-flex items-center justify-center gap-1.5 rounded-full bg-primary/20 px-2 py-0.5 transition-all duration-200',
+                    isFullscreenBrowse && isFullscreenNotesHidden
+                      ? 'fixed bottom-1.5 left-1/2 z-40 -translate-x-1/2 border border-white/40 backdrop-blur-sm'
+                      : 'mt-3',
                     isFullscreenBrowse && isFullscreenNotesHidden
                       ? isBottomControlsVisible
                         ? 'opacity-100'
@@ -544,20 +546,15 @@ export default function App() {
                       key={index}
                       onClick={() => handleSlideChange(index)}
                       className={cn(
-                        'h-2.5 w-2.5 rounded-full transition-all',
-                        activeSlideIndex === index ? 'bg-primary w-6' : 'bg-primary/30 hover:bg-primary/50'
+                        'h-1.5 w-1.5 rounded-full transition-all',
+                        activeSlideIndex === index ? 'bg-primary w-4' : 'bg-primary/40 hover:bg-primary/60'
                       )}
                       aria-label={`Go to slide ${index + 1}`}
                     />
                   ))}
                 </div>
                 {isFullscreenBrowse && isFullscreenNotesHidden && !isBottomControlsVisible && (
-                  <div className="pointer-events-none fixed bottom-3 left-1/2 z-20 -translate-x-1/2 text-white/80 drop-shadow-sm">
-                    <div className="flex flex-col items-center gap-1 rounded-full bg-black/20 px-2.5 py-1 backdrop-blur-sm">
-                      <ChevronUp className="h-3.5 w-3.5 animate-pulse" />
-                      <span className="text-[10px] tracking-wide">Move cursor here</span>
-                    </div>
-                  </div>
+                  <div className="pointer-events-none fixed bottom-2 left-1/2 z-20 h-0.5 w-16 -translate-x-1/2 rounded-full bg-white/70 shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
                 )}
                 {mediaIssue && (
                   <div className="mt-3 w-full max-w-4xl rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">
