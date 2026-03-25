@@ -21,95 +21,95 @@ Before exploring the analytics in detail, it’s important to understand how the
 00:00:40.000 --> 00:00:54.000
 The platform includes five major analytical dashboards designed for different user needs across finance and operations, including organization, cost overview, manufacturing, quality, process, material analysis, and cost segments.
 
-00:00:54.000 --> 01:03:000
+00:00:54.000 --> 01:03.000
 For example, we want to quickly see whether the twenty-eight nanometer node has any emerging issues that require corrective action.
 
-01:03.000 --> 01:16:000
+01:03.000 --> 01:16.000
 We start at the organizational cost overview and select the twenty-eight nanometer technology to identify the product and fab combination with the highest total cost, which is the ARM Cortex processor from Fab A.
 
-01:16.000 --> 01:28:000
+01:16.000 --> 01:28.000
 From there, we drill into process area variances and continue deeper into MES operation variances to pinpoint which manufacturing steps are driving cost differences.
 
-01:28:000 --> 01:39:000
+01:28.000 --> 01:39.000
 At this point, instead of manually comparing charts, we use SAP Joule to explore the business question directly, using our OPC analytics and Sapience Manufacturing Hub production data.
 
-01:39:000 --> 01:53:000
+01:39.000 --> 01:53.000
 In this example, we ask Joule to identify the main cost contributor to the variance for the ARM Cortex processor produced in Fab A, and to provide an executive summary with trend and anomaly analysis using natural language.
 
-01:53:000 --> 02:01:000
+01:53.000 --> 02:01.000
 Joule helps users analyze both SAP financial data and manufacturing operations data synchronized through SMH.
 
-02:01:000 --> 02:03:000
+02:01.000 --> 02:03.000
 Joule helps surface the key insight.
 
-02:03:000 --> 02:11:000
+02:03.000 --> 02:11.000
 The largest contributor to the cost variance is CMP slurry, a critical material used in the chemical mechanical polishing process.
 
-02:11:000 --> 02:21:000
+02:11.000 --> 02:21.000
 The analysis shows material cost is approximately four hundred thirteen thousand dollars under budget, representing about sixteen percent of the total variance.
 
-02:21:000 --> 02:24:000
+02:21.000 --> 02:24.000
 Joule also summarizes the overall cost position.
 
-02:24:000 --> 02:34:000
+02:24.000 --> 02:34.000
 Actual cost is sixty-three point four million dollars, compared to a planned cost of sixty-four point eight million, resulting in a one point four million dollar favorable variance.
 
-02:34:000 --> 02:40:000
+02:34.000 --> 02:40.000
 For executives, this provides a clear and immediate understanding of where the financial difference originates.
 
-02:40:000 --> 02:45:000
+02:40.000 --> 02:45.000
 Joule then helps users drill deeper into the manufacturing operations driving the variance.
 
-02:45:000 --> 02:50:000
+02:45.000 --> 02:50.000
 Here we see the top MES operations contributing to cost differences.
 
-02:50:000 --> 02:58:000
+02:50.000 --> 02:58.000
 Gate Poly deposition and dielectric deposition both show significant savings compared to plan.
 
-02:58:000 --> 03:06:000
+02:58.000 --> 03:06.000
 Instead of manually reviewing multiple reports, Joule helps surface the most relevant operational signals instantly.
 
-03:06:000 --> 03:09:000
+03:06.000 --> 03:09.000
 Next, we ask Joule to go a step further.
 
-03:09:000 --> 03:19:000
+03:09.000 --> 03:19.000
 Rather than simply listing variances, we use natural language to ask Joule to prioritize top cost issues based on financial impact and operational risk.
 
-03:19:000 --> 03:24:000
+03:19.000 --> 03:24.000
 Joule helps users focus on three key areas requiring attention.
 
-03:24:000 --> 03:27:000
+03:24.000 --> 03:27.000
 First, CMP slurry material cost.
 
-03:27:000 --> 03:31:000
+03:27.000 --> 03:31.000
 While the cost appears favorable, Joule highlights a potential risk.
 
-03:31:000 --> 03:34:000
+03:31.000 --> 03:34.000
 Second, Gate Poly deposition.
 
-03:34:000 --> 03:43:000
+03:34.000 --> 03:43.000
 Although costs are lower than expected, Joule flags that reduced material usage or process changes may impact long-term yield or product quality.
 
-03:43:000 --> 03:53:000
+03:43.000 --> 03:53.000
 Third, Final Test operations exceed plan, and testing bottlenecks at this stage can affect cycle time, throughput, and delivery schedules.
 
-03:53:000 --> 04:00:000
+03:53.000 --> 04:00.000
 This prioritized view helps executives focus immediately on the issues that matter most.
 
-04:00:000 --> 04:04:000
+04:00.000 --> 04:04.000
 Finally, we ask Joule to recommend specific action items.
 
-04:04:000 --> 04:13:000
+04:04.000 --> 04:13.000
 Because Joule understands both business context and operational data, it helps guide users toward targeted, cross-functional actions.
 
-04:13:000 --> 04:21:000
+04:13.000 --> 04:21.000
 This example illustrates the power of combining SAP Joule with PDF Operational Product Costing analytics and SMH data integration.
 
-04:21:000 --> 04:37:000
+04:21.000 --> 04:37.000
 Instead of manually analyzing multiple systems, teams can ask simple business questions and quickly receive clear financial insights, operational drivers, and recommended next steps.
 
-04:37:000 --> 04:51:000
+04:37.000 --> 04:51.000
 With SMH providing a complete, consistent foundation of operational data, and SAP Joule turning that data into clear, actionable intelligence, manufacturers can connect what happens in the fab to what matters in the business.
 
-04:51:000 --> 05:02:000
+04:51.000 --> 05:02.000
 It is a unified path from production reality to enterprise decisions, enabling faster insights, smarter operations, and more confident execution across the value chain.
