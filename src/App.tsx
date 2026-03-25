@@ -26,12 +26,14 @@ export default function App() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [mediaIssue, setMediaIssue] = useState<string | null>(null);
   const [isFullscreenNotesHidden, setIsFullscreenNotesHidden] = useState(false);
+  const [isHeaderHidden, setIsHeaderHidden] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const activeAudioUrlRef = useRef<string | null>(null);
   const demoCardRef = useRef<HTMLDivElement | null>(null);
   const mediaFrameRef = useRef<HTMLDivElement | null>(null);
   const browseVideoRef = useRef<HTMLVideoElement | null>(null);
+  const lastScrollYRef = useRef(0);
 
   const activeSlideIndex = slideIndexBySection[activeSection.id] ?? 0;
   const activeSlide = activeSection.slides[activeSlideIndex];
@@ -97,7 +99,8 @@ export default function App() {
     () => `Slide ${activeSlideIndex + 1} of ${activeSection.slides.length}`,
     [activeSection.slides.length, activeSlideIndex]
   );
-    const hasSlideAudio = Boolean(activeSlide?.audioUrl);
+  const hasSlideAudio = Boolean(activeSlide?.audioUrl);
+  const isLastSlide = activeSlideIndex === activeSection.slides.length - 1;
   const isEmbeddedWatchUrl = /^https?:\/\/(www\.)?(youtube\.com|player\.vimeo\.com)\//.test(
     activeSectionWatchUrl
   );
@@ -202,6 +205,26 @@ export default function App() {
   }, [isFullscreenBrowse]);
 
   useEffect(() => {
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      const scrollingDown = currentY > lastScrollYRef.current;
+
+      if (currentY <= 8) {
+        setIsHeaderHidden(false);
+      } else if (scrollingDown && currentY > 80) {
+        setIsHeaderHidden(true);
+      } else if (!scrollingDown) {
+        setIsHeaderHidden(false);
+      }
+
+      lastScrollYRef.current = currentY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
     const activeMediaUrl = viewMode === 'browse' ? activeSlide.mediaUrl : activeSection.watchVideoUrl;
     const isVideoMedia =
       (viewMode === 'browse' && activeSlide.mediaType === 'video') ||
@@ -252,7 +275,12 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header className="sticky top-0 z-50 border-b border-primary/15 bg-gradient-to-r from-sky-50 via-indigo-50 to-violet-50 shadow-sm backdrop-blur">
+      <header
+        className={cn(
+          'sticky top-0 z-50 border-b border-primary/15 bg-gradient-to-r from-sky-50 via-indigo-50 to-violet-50 shadow-sm backdrop-blur transition-transform duration-300',
+          isHeaderHidden && '-translate-y-full'
+        )}
+      >
         <div className="px-6 py-4 flex items-center gap-4 md:gap-6 flex-wrap">
           <div className="inline-flex items-center gap-3 self-start rounded-full border border-primary/20 bg-white/90 px-4 py-2 shadow-sm">
             <img
@@ -353,7 +381,9 @@ export default function App() {
                     isFullscreen &&
                       'max-h-[calc(100vh-10rem)] rounded-lg shadow-2xl border border-border',
                     isFullscreen && !isFullscreenNotesHidden && 'max-w-[min(92vw,1600px)]',
-                    isFullscreen && isFullscreenNotesHidden && 'max-w-none'
+                    isFullscreen &&
+                      isFullscreenNotesHidden &&
+                      'h-full max-h-[100vh] max-w-none rounded-none border-0 bg-transparent shadow-none'
                   )}
                 >
                   {activeSlide.mediaType === 'video' ? (
@@ -361,7 +391,7 @@ export default function App() {
                       ref={browseVideoRef}
                       key={activeSlideMediaUrl}
                       src={activeSlideMediaUrl}
-                      className="w-full h-full object-contain bg-black"
+                      className="w-full h-full object-contain"
                       autoPlay
                       loop
                       muted
@@ -609,13 +639,30 @@ export default function App() {
                 </button>
               </div>
             )}
+
+            {isFullscreenBrowse && isLastSlide && (
+              <div className="pt-8 mt-auto border-t border-border">
+                <button
+                  onClick={handleNextSection}
+                  className="w-full group flex items-center justify-between p-4 rounded-xl border border-primary/20 bg-primary/5 hover:bg-primary/10 transition-colors"
+                >
+                  <div className="text-left">
+                    <p className="text-[10px] font-bold text-primary uppercase tracking-widest">Next Section</p>
+                    <p className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+                      {activeSection.nextSectionLabel}
+                    </p>
+                  </div>
+                  <ArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
+            )}
           </div>
           )}
         </div>
       </main>
 
       <footer className="py-8 px-6 text-center text-xs text-muted-foreground">
-        SAP SMH Interactive Experience Demo &bull; Designed for Enterprise Strategy
+        Sapience Manufacturing Hub Interactive Demo &bull; Designed for Enterprise Strategy
       </footer>
     </div>
   );
