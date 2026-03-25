@@ -34,6 +34,7 @@ export default function App() {
   const demoCardRef = useRef<HTMLDivElement | null>(null);
   const mediaFrameRef = useRef<HTMLDivElement | null>(null);
   const browseVideoRef = useRef<HTMLVideoElement | null>(null);
+  const watchVideoRef = useRef<HTMLVideoElement | null>(null);
   const lastScrollYRef = useRef(0);
 
   const activeSlideIndex = slideIndexBySection[activeSection.id] ?? 0;
@@ -163,6 +164,17 @@ export default function App() {
 
     audioRef.current.pause();
     setIsAudioPlaying(false);
+  };
+
+  const disableWatchCaptionsByDefault = () => {
+    const video = watchVideoRef.current;
+    if (!video) {
+      return;
+    }
+
+    for (const track of video.textTracks) {
+      track.mode = 'disabled';
+    }
   };
 
   const toggleFullscreen = async () => {
@@ -597,11 +609,13 @@ export default function App() {
                 />
               ) : (
                 <video
+                  ref={watchVideoRef}
                   key={activeSectionWatchUrl}
                   src={activeSectionWatchUrl}
                   className="demo-video w-full h-full"
                   controls
                   playsInline
+                  onLoadedMetadata={disableWatchCaptionsByDefault}
                 >
                   {activeSectionCaptionsUrl && (
                     <track
@@ -609,7 +623,6 @@ export default function App() {
                       src={activeSectionCaptionsUrl}
                       srcLang="en-US"
                       label="English (US)"
-                      default
                     />
                   )}
                 </video>
