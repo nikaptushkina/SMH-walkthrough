@@ -13,6 +13,7 @@ import {
   Volume2,
   ChevronRight,
   ChevronLeft,
+  ChevronUp,
 } from 'lucide-react';
 import { DEMO_SECTIONS, VIEW_MODES, type DemoSection } from './data/demo-content';
 import { cn } from './lib/utils';
@@ -27,6 +28,7 @@ export default function App() {
   const [mediaIssue, setMediaIssue] = useState<string | null>(null);
   const [isFullscreenNotesHidden, setIsFullscreenNotesHidden] = useState(false);
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
+  const [isBottomControlsVisible, setIsBottomControlsVisible] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const activeAudioUrlRef = useRef<string | null>(null);
@@ -201,8 +203,32 @@ export default function App() {
   useEffect(() => {
     if (!isFullscreenBrowse) {
       setIsFullscreenNotesHidden(false);
+      setIsBottomControlsVisible(false);
     }
   }, [isFullscreenBrowse]);
+
+  useEffect(() => {
+    if (!isFullscreenNotesHidden) {
+      setIsBottomControlsVisible(true);
+      return;
+    }
+
+    setIsBottomControlsVisible(false);
+  }, [isFullscreenNotesHidden]);
+
+  const handleFullscreenBrowseMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!(isFullscreenBrowse && isFullscreenNotesHidden)) {
+      return;
+    }
+
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const cursorDistanceFromBottom = bounds.bottom - event.clientY;
+    const shouldShowControls = cursorDistanceFromBottom <= 120;
+
+    if (shouldShowControls !== isBottomControlsVisible) {
+      setIsBottomControlsVisible(shouldShowControls);
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -360,9 +386,10 @@ export default function App() {
             )}
             {viewMode === 'browse' ? (
               <div
+                onMouseMove={handleFullscreenBrowseMouseMove}
                 className={cn(
                   'h-full flex flex-col items-center justify-center p-4',
-                  isFullscreen && (isFullscreenNotesHidden ? 'p-0 justify-start overflow-auto' : 'p-8')
+                  isFullscreen && (isFullscreenNotesHidden ? 'p-0 justify-center overflow-hidden' : 'p-8')
                 )}
               >
                 {isFullscreenBrowse && isFullscreenNotesHidden && (
@@ -385,7 +412,7 @@ export default function App() {
                     isFullscreen && !isFullscreenNotesHidden && 'max-w-[min(92vw,1600px)]',
                     isFullscreen &&
                       isFullscreenNotesHidden &&
-                      'w-auto max-w-full max-h-[calc(100vh-9rem)] aspect-auto overflow-visible border-0 bg-transparent shadow-none'
+                      'h-screen w-screen max-h-none max-w-none aspect-auto overflow-hidden border-0 bg-transparent shadow-none rounded-none'
                   )}
                 >
                   {activeSlide.mediaType === 'video' ? (
@@ -396,7 +423,7 @@ export default function App() {
                       className={cn(
                         'object-contain',
                         isFullscreen && isFullscreenNotesHidden
-                          ? 'w-auto max-w-full max-h-[calc(100vh-9rem)] h-auto rounded-lg'
+                          ? 'h-screen w-screen max-h-none max-w-none rounded-none'
                           : 'w-full h-full'
                       )}
                       autoPlay
@@ -412,7 +439,7 @@ export default function App() {
                       className={cn(
                         'object-contain transition-opacity duration-500',
                         isFullscreen && isFullscreenNotesHidden
-                          ? 'w-auto max-w-full max-h-[calc(100vh-9rem)] h-auto rounded-lg'
+                          ? 'h-screen w-screen max-h-none max-w-none rounded-none'
                           : 'w-full h-full'
                       )}
                     />
@@ -438,7 +465,23 @@ export default function App() {
                         <ArrowRight className="w-5 h-5" />
                       </button>
                     </div>
-                    <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+                    <div
+                      className={cn(
+                        'left-1/2 z-30 -translate-x-1/2 rounded-2xl border border-white/60 bg-white/45 px-4 py-3 shadow-lg backdrop-blur-md transition-all duration-200',
+                        isFullscreenNotesHidden
+                          ? 'fixed'
+                          : 'absolute',
+                        isFullscreenNotesHidden
+                          ? 'bottom-4'
+                          : 'bottom-5',
+                        isFullscreenNotesHidden
+                          ? isBottomControlsVisible
+                            ? 'pointer-events-auto translate-y-0 opacity-100'
+                            : 'pointer-events-none translate-y-4 opacity-0'
+                          : 'pointer-events-auto translate-y-0 opacity-100'
+                      )}
+                    >
+                    <div className="flex flex-wrap items-center justify-center gap-2">
                       {hasSlideAudio && (
                         <>
                           <button
@@ -483,9 +526,19 @@ export default function App() {
                         {isFullscreenNotesHidden ? 'Show Notes Panel' : 'Hide Notes Panel'}
                       </button>
                     </div>
+                    </div>
                   </>
                 )}
-                <div className="mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-secondary/70 px-3 py-1.5">
+                <div
+                  className={cn(
+                    'mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-secondary/70 px-3 py-1.5 transition-all duration-200',
+                    isFullscreenBrowse && isFullscreenNotesHidden
+                      ? isBottomControlsVisible
+                        ? 'opacity-100'
+                        : 'pointer-events-none opacity-0'
+                      : 'opacity-100'
+                  )}
+                >
                   {activeSection.slides.map((_, index) => (
                     <button
                       key={index}
@@ -498,6 +551,14 @@ export default function App() {
                     />
                   ))}
                 </div>
+                {isFullscreenBrowse && isFullscreenNotesHidden && !isBottomControlsVisible && (
+                  <div className="pointer-events-none fixed bottom-3 left-1/2 z-20 -translate-x-1/2 text-white/80 drop-shadow-sm">
+                    <div className="flex flex-col items-center gap-1 rounded-full bg-black/20 px-2.5 py-1 backdrop-blur-sm">
+                      <ChevronUp className="h-3.5 w-3.5 animate-pulse" />
+                      <span className="text-[10px] tracking-wide">Move cursor here</span>
+                    </div>
+                  </div>
+                )}
                 {mediaIssue && (
                   <div className="mt-3 w-full max-w-4xl rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">
                     {mediaIssue}
