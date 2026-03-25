@@ -16,8 +16,6 @@ import {
 } from 'lucide-react';
 import { DEMO_SECTIONS, VIEW_MODES, type DemoSection } from './data/demo-content';
 import { cn } from './lib/utils';
-import { useIsMobile } from './hooks/use-mobile';
-
 export default function App() {
   const [activeSection, setActiveSection] = useState<DemoSection>(DEMO_SECTIONS[0]);
   const [viewMode, setViewMode] = useState<'watch' | 'browse'>('watch');
@@ -28,18 +26,12 @@ export default function App() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [mediaIssue, setMediaIssue] = useState<string | null>(null);
   const [isFullscreenNotesHidden, setIsFullscreenNotesHidden] = useState(false);
-  const [isHeaderHidden, setIsHeaderHidden] = useState(false);
-  const [isMobilePseudoFullscreen, setIsMobilePseudoFullscreen] = useState(false);
-  const isMobile = useIsMobile();
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const activeAudioUrlRef = useRef<string | null>(null);
   const demoCardRef = useRef<HTMLDivElement | null>(null);
   const mediaFrameRef = useRef<HTMLDivElement | null>(null);
-  const isLastSlide = activeSlideIndex === activeSection.slides.length - 1;
-  const isFullscreenActive = isFullscreen || isMobilePseudoFullscreen;
-  const isFullscreenBrowse = viewMode === 'browse' && isFullscreenActive;
-  const showMobileInlineNotes = isMobile && viewMode === 'browse' && !isFullscreenBrowse;
+  const browseVideoRef = useRef<HTMLVideoElement | null>(null);
 
   const activeSlideIndex = slideIndexBySection[activeSection.id] ?? 0;
   const activeSlide = activeSection.slides[activeSlideIndex];
@@ -172,37 +164,15 @@ export default function App() {
       return;
     }
 
-    if (isMobilePseudoFullscreen) {
-      setIsMobilePseudoFullscreen(false);
-      return;
-    }
-
     if (document.fullscreenElement) {
       await document.exitFullscreen();
       return;
     }
 
-    const canUseNativeFullscreen = typeof fullscreenTarget.requestFullscreen === 'function';
-    if (canUseNativeFullscreen) {
-      try {
-        await fullscreenTarget.requestFullscreen();
-        return;
-      } catch {
-        // Fall back to CSS-based fullscreen for mobile browsers with limited support.
-      }
-    }
-
-    if (isMobile) {
-      setIsMobilePseudoFullscreen(true);
-    }
+    await fullscreenTarget.requestFullscreen();
   };
 
   const exitFullscreen = async () => {
-    if (isMobilePseudoFullscreen) {
-      setIsMobilePseudoFullscreen(false);
-      return;
-    }
-
     if (!document.fullscreenElement) {
       return;
     }
@@ -230,18 +200,6 @@ export default function App() {
       setIsFullscreenNotesHidden(false);
     }
   }, [isFullscreenBrowse]);
-
-  useEffect(() => {
-    if (!isMobilePseudoFullscreen) {
-      document.body.style.overflow = '';
-      return;
-    }
-
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isMobilePseudoFullscreen]);
 
   useEffect(() => {
     const activeMediaUrl = viewMode === 'browse' ? activeSlide.mediaUrl : activeSection.watchVideoUrl;
@@ -292,32 +250,9 @@ export default function App() {
     viewMode,
   ]);
 
-  useEffect(() => {
-    let lastScrollY = window.scrollY;
-
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const scrollingDown = currentScrollY > lastScrollY;
-      const shouldHide = scrollingDown && currentScrollY > 80;
-      setIsHeaderHidden(shouldHide);
-      lastScrollY = currentScrollY;
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header
-        className={cn(
-          'sticky top-0 z-50 border-b border-primary/15 bg-gradient-to-r from-sky-50 via-indigo-50 to-violet-50 shadow-sm backdrop-blur transition-transform duration-300',
-          isHeaderHidden && '-translate-y-full'
-        )}
-      >
+      <header className="sticky top-0 z-50 border-b border-primary/15 bg-gradient-to-r from-sky-50 via-indigo-50 to-violet-50 shadow-sm backdrop-blur">
         <div className="px-6 py-4 flex items-center gap-4 md:gap-6 flex-wrap">
           <div className="inline-flex items-center gap-3 self-start rounded-full border border-primary/20 bg-white/90 px-4 py-2 shadow-sm">
             <img
@@ -375,8 +310,7 @@ export default function App() {
           key={activeSection.id}
           className={cn(
             'sap-card p-0 min-h-[600px] flex flex-col lg:flex-row bg-card animate-in',
-            viewMode === 'browse' && 'lg:items-stretch',
-            isMobilePseudoFullscreen && 'fixed inset-0 z-[70] m-0 min-h-0 rounded-none'
+            viewMode === 'browse' && 'lg:items-stretch'
           )}
         >
           <div
@@ -384,7 +318,7 @@ export default function App() {
             className={cn(
               'flex-1 border-b lg:border-b-0 lg:border-r border-border bg-black/5 relative aspect-video lg:aspect-auto',
               isFullscreenBrowse && 'bg-background',
-              isFullscreenActive && viewMode === 'browse' && 'border-none'
+              isFullscreen && viewMode === 'browse' && 'border-none'
             )}
           >
             {!isFullscreenBrowse && (
@@ -392,15 +326,15 @@ export default function App() {
                 onClick={() => void toggleFullscreen()}
                 className="absolute top-3 right-3 z-10 sap-btn-secondary py-1 text-xs inline-flex items-center gap-1.5"
               >
-                {isFullscreenActive ? <Minimize className="w-3.5 h-3.5" /> : <Maximize className="w-3.5 h-3.5" />}
-                {isFullscreenActive ? 'Exit Full Screen' : 'Full Screen'}
+                {isFullscreen ? <Minimize className="w-3.5 h-3.5" /> : <Maximize className="w-3.5 h-3.5" />}
+                {isFullscreen ? 'Exit Full Screen' : 'Full Screen'}
               </button>
             )}
             {viewMode === 'browse' ? (
               <div
-                  className={cn(
-                    'h-full flex flex-col items-center justify-center p-4',
-                  isFullscreenActive && (isFullscreenNotesHidden ? 'p-2' : 'p-8')
+                className={cn(
+                  'h-full flex flex-col items-center justify-center p-4',
+                  isFullscreen && (isFullscreenNotesHidden ? 'p-2' : 'p-8')
                 )}
               >
                 {isFullscreenBrowse && isFullscreenNotesHidden && (
@@ -416,13 +350,10 @@ export default function App() {
                 <div
                   className={cn(
                     'relative w-full max-w-4xl aspect-video rounded-lg overflow-hidden shadow-2xl border border-border bg-card',
-                    isMobile && viewMode === 'browse' && !isFullscreenBrowse && 'max-w-none',
-                    isFullscreenActive &&
+                    isFullscreen &&
                       'max-h-[calc(100vh-10rem)] rounded-lg shadow-2xl border border-border',
-                    isFullscreenActive && !isFullscreenNotesHidden && 'max-w-[min(92vw,1600px)]',
-                    isFullscreenActive &&
-                      isFullscreenNotesHidden &&
-                      'aspect-auto w-auto max-w-[calc(100vw-2rem)] max-h-[calc(100vh-8rem)] overflow-visible rounded-none border-none bg-transparent shadow-none'
+                    isFullscreen && !isFullscreenNotesHidden && 'max-w-[min(92vw,1600px)]',
+                    isFullscreen && isFullscreenNotesHidden && 'max-w-none'
                   )}
                 >
                   {activeSlide.mediaType === 'video' ? (
@@ -430,10 +361,7 @@ export default function App() {
                       ref={browseVideoRef}
                       key={activeSlideMediaUrl}
                       src={activeSlideMediaUrl}
-                      className={cn(
-                        'w-full h-full object-contain bg-black',
-                        isFullscreenActive && isFullscreenNotesHidden && 'w-auto h-auto max-w-full max-h-full bg-transparent'
-                      )}
+                      className="w-full h-full object-contain bg-black"
                       autoPlay
                       loop
                       muted
@@ -444,10 +372,7 @@ export default function App() {
                     <img
                       src={activeSlideMediaUrl}
                       alt={`${activeSection.title} slide ${activeSlideIndex + 1}`}
-                      className={cn(
-                        'w-full h-full object-contain transition-opacity duration-500',
-                        isFullscreenActive && isFullscreenNotesHidden && 'w-auto h-auto max-w-full max-h-full'
-                      )}
+                      className="w-full h-full object-contain transition-opacity duration-500"
                     />
                   )}
                 </div>
@@ -481,15 +406,14 @@ export default function App() {
                             title="Restart audio from beginning"
                           >
                             <RotateCcw className="w-3.5 h-3.5" />
-                            {!isMobile && 'Restart Audio'}
+                            Restart Audio
                           </button>
                           <button
                             onClick={isAudioPlaying ? pauseSlideAudio : () => playSlideAudio()}
                             className="sap-btn-primary py-1 text-sm inline-flex items-center gap-1.5"
-                            aria-label={isAudioPlaying ? 'Pause audio' : 'Play audio'}
                           >
                             {isAudioPlaying ? <Pause className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
-                            {!isMobile && (isAudioPlaying ? 'Pause Audio' : 'Play Audio')}
+                            {isAudioPlaying ? 'Pause Audio' : 'Play Audio'}
                           </button>
                         </>
                       )}
@@ -572,7 +496,7 @@ export default function App() {
           </div>
 
           {showFullscreenNotesPanel && (
-          <div className="relative w-full lg:w-96 flex flex-col p-4 sm:p-6 lg:p-8 bg-card">
+          <div className="relative w-full lg:w-96 flex flex-col p-8 bg-card">
             {isFullscreenBrowse && (
               <button
                 onClick={() => setIsFullscreenNotesHidden(true)}
@@ -584,7 +508,7 @@ export default function App() {
               </button>
             )}
             <div className="flex-1 space-y-6">
-              {!isFullscreenBrowse && !showMobileInlineNotes && (
+              {!isFullscreenBrowse && (
                 <>
                   <div className="space-y-2">
                     <h3 className="text-xl font-semibold text-foreground">{activeSection.title}</h3>
@@ -644,10 +568,9 @@ export default function App() {
                         <button
                           onClick={isAudioPlaying ? pauseSlideAudio : () => playSlideAudio()}
                           className="sap-btn-primary py-1.5 text-sm inline-flex items-center gap-2"
-                          aria-label={isAudioPlaying ? 'Pause audio' : 'Play audio'}
                         >
                           {isAudioPlaying ? <Pause className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-                          {!isMobile && (isAudioPlaying ? 'Pause Audio' : 'Play Audio')}
+                          {isAudioPlaying ? 'Pause Audio' : 'Play Audio'}
                         </button>
                       </div>
                     )}
@@ -672,23 +595,6 @@ export default function App() {
 
             {!isFullscreenBrowse && (
               <div className="pt-8 mt-8 border-t border-border">
-                <button
-                  onClick={handleNextSection}
-                  className="w-full group flex items-center justify-between p-4 rounded-xl border border-primary/20 bg-primary/5 hover:bg-primary/10 transition-colors"
-                >
-                  <div className="text-left">
-                    <p className="text-[10px] font-bold text-primary uppercase tracking-widest">Next Section</p>
-                    <p className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
-                      {activeSection.nextSectionLabel}
-                    </p>
-                  </div>
-                  <ArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" />
-                </button>
-              </div>
-            )}
-
-            {isFullscreenBrowse && isLastSlide && (
-              <div className="pt-6 mt-6 border-t border-border">
                 <button
                   onClick={handleNextSection}
                   className="w-full group flex items-center justify-between p-4 rounded-xl border border-primary/20 bg-primary/5 hover:bg-primary/10 transition-colors"
