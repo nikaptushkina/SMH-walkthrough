@@ -554,29 +554,25 @@ export default function App() {
                 <div className="space-y-4 rounded-lg border border-border p-4 bg-secondary/20">
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-semibold text-foreground">{browseProgressLabel}</p>
-                    <div className="flex items-center gap-2">
-                      {hasSlideAudio ? (
-                        <>
-                          <button
-                            onClick={restartSlideAudio}
-                            className="sap-btn-secondary py-1.5 px-2.5 text-sm inline-flex items-center"
-                            aria-label="Restart slide audio from beginning"
-                            title="Restart audio from beginning"
-                          >
-                            <RotateCcw className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={isAudioPlaying ? pauseSlideAudio : () => playSlideAudio()}
-                            className="sap-btn-primary py-1.5 text-sm inline-flex items-center gap-2"
-                          >
-                            {isAudioPlaying ? <Pause className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-                            {isAudioPlaying ? 'Pause Audio' : 'Play Audio'}
-                          </button>
-                        </>
-                      ) : (
-                        <span className="text-xs text-muted-foreground">Audio for this slide is coming soon.</span>
-                      )}
-                    </div>
+                    {hasSlideAudio && (
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={restartSlideAudio}
+                          className="sap-btn-secondary py-1.5 px-2.5 text-sm inline-flex items-center"
+                          aria-label="Restart slide audio from beginning"
+                          title="Restart audio from beginning"
+                        >
+                          <RotateCcw className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={isAudioPlaying ? pauseSlideAudio : () => playSlideAudio()}
+                          className="sap-btn-primary py-1.5 text-sm inline-flex items-center gap-2"
+                        >
+                          {isAudioPlaying ? <Pause className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                          {isAudioPlaying ? 'Pause Audio' : 'Play Audio'}
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   <ul className="list-disc pl-5 space-y-2 text-sm text-muted-foreground">
@@ -585,13 +581,13 @@ export default function App() {
                     ))}
                   </ul>
 
-                  <p className="text-xs text-muted-foreground">
-                    {!hasSlideAudio
-                      ? 'Audio is not uploaded for this slide yet.'
-                      : isAudioPlaying
+                  {hasSlideAudio && (
+                    <p className="text-xs text-muted-foreground">
+                      {isAudioPlaying
                         ? 'Audio is playing for this slide. You can navigate anytime.'
                         : 'Audio is optional. Click through silently or narrate live as needed.'}
-                  </p>
+                    </p>
+                  )}
                 </div>
               )}
             </div>

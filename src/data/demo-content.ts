@@ -195,71 +195,78 @@ export const DEMO_SECTIONS: DemoSection[] = [
       {
         mediaUrl: '/Section 3 - Slide 1.png',
         mediaType: 'image',
+        audioUrl: '/Section 3 - Audio 1.mp3',
         bullets: ['Slide content uploaded.', 'Narration notes pending.'],
       },
       {
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%203%20-%20Slide%202.mp4',
         mediaType: 'video',
+        audioUrl: '/Section 3 - Audio 2.mp3',
         bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
       },
       {
         mediaUrl: '/Section 3 - Slide 3.png',
         mediaType: 'image',
         bullets: ['Slide content uploaded.', 'Narration notes pending.'],
-        audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
+        audioUrl: '/Section 3 - Audio 3.mp3',
       },
       {
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%203%20-%20Slide%204.mp4',
+        audioUrl: '/Section 3 - Audio 4.mp3',
         mediaType: 'video',
         bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
       },
       {
         mediaUrl: '/Section 3 - Slide 5.png',
         mediaType: 'image',
+        audioUrl: '/Section 3 - Audio 5.mp3',
         bullets: ['Slide content uploaded.', 'Narration notes pending.'],
-        audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
       },
       {
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%203%20-%20Slide%206.mp4',
         mediaType: 'video',
+        audioUrl: '/Section 3 - Audio 6.mp3',
         bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
       },
       {
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%203%20-%20Slide%207.mp4',
         mediaType: 'video',
+        audioUrl: '/Section 3 - Audio 7.mp3',
         bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
       },
       {
         mediaUrl:
           'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%203%20-%20Slide%208.mp4',
         mediaType: 'video',
+        audioUrl: '/Section 3 - Audio 8.mp3',
         bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
       },
       {
         mediaUrl: '/Section 3 - Slide 9.png',
         mediaType: 'image',
+        audioUrl: '/Section 3 - Audio 9.mp3',
         bullets: ['Slide content uploaded.', 'Narration notes pending.'],
       },
       {
-        mediaUrl:
-          'https://bxqbfoszjka2jfka.public.blob.vercel-storage.com/Section%203%20-%20Slide%2010.mp4',
-        mediaType: 'video',
-        bullets: ['Video slide plays automatically when this slide is active.', 'Narration notes pending.'],
+        mediaUrl: '/Section 3 - Slide 10.png',
+        mediaType: 'image',
+        audioUrl: '/Section 3 - Audio 10.mp3',
+        bullets: ['Slide content uploaded.', 'Narration notes pending.'],
       },
       {
         mediaUrl: '/Section 3 - Slide 11.png',
         mediaType: 'image',
+        audioUrl: '/Section 3 - Audio 11.mp3',
         bullets: ['Slide content uploaded.', 'Narration notes pending.'],
       },
       {
         mediaUrl: '/Section 3 - Slide 12.png',
         mediaType: 'image',
         bullets: ['Slide content uploaded.', 'Narration notes pending.'],
-        audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3',
       },
     ],
     nextSectionId: 'overview',
