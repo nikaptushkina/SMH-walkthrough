@@ -114,14 +114,21 @@
 }
 
 .demo-video::cue {
-  color: #f8fafc;
-  background: color-mix(in srgb, #0b1220 55%, transparent);
-  font-size: 0.95rem;
-  font-weight: 500;
-  line-height: 1.2;
-  text-shadow: 0 1px 2px rgb(0 0 0 / 0.85);
+  color: #ffffff;
+  background: color-mix(in srgb, #0f172a 40%, transparent);
+  font-size: 1.12rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0.18em 0.5em;
+  text-shadow:
+    0 1px 1px rgb(0 0 0 / 0.95),
+    0 0 10px rgb(0 0 0 / 0.75);
 }
 
 .demo-video::cue(b) {
-  color: #bfdbfe;
+  color: #ffffff;
+}
+
+.demo-video::cue-region {
+  width: 88%;
 }
