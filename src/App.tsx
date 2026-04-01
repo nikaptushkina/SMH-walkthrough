@@ -46,18 +46,13 @@ export default function App() {
     const match = url.match(/drive\.google\.com\/file\/d\/([^/]+)/i);
     return match?.[1];
   };
-  const toGoogleDrivePreviewUrl = (url: string, autoplay = false) => {
+  const toGoogleDrivePreviewUrl = (url: string) => {
     const fileId = getGoogleDriveFileId(url);
     if (!fileId) {
       return null;
     }
 
-    const params = new URLSearchParams({
-      rm: 'minimal',
-      autoplay: autoplay ? '1' : '0',
-    });
-
-    return `https://drive.google.com/file/d/${fileId}/preview?${params.toString()}`;
+    return `https://drive.google.com/file/d/${fileId}/preview`;
   };
   const resolveMediaUrl = (url: string) => {
     if (/^(https?:)?\/\//.test(url) || url.startsWith('data:') || url.startsWith('blob:')) {
@@ -73,9 +68,9 @@ export default function App() {
   };
   const activeSlideMediaUrl = resolveMediaUrl(activeSlide.mediaUrl);
   const activeSectionWatchUrl = resolveMediaUrl(activeSection.watchVideoUrl);
-  const activeSlideEmbedUrl = toGoogleDrivePreviewUrl(activeSlideMediaUrl, true);
-  const activeSectionWatchEmbedUrl = toGoogleDrivePreviewUrl(activeSectionWatchUrl, true);
-  const activeSectionCaptionsUrl = activeSection.watchCaptionsUrl
+  const activeSlideEmbedUrl = toGoogleDrivePreviewUrl(activeSlideMediaUrl);
+  const activeSectionWatchEmbedUrl = toGoogleDrivePreviewUrl(activeSectionWatchUrl);
+ const activeSectionCaptionsUrl = activeSection.watchCaptionsUrl
     ? resolveMediaUrl(activeSection.watchCaptionsUrl)
     : undefined;
   const pdfLogoUrl = resolveMediaUrl('/favicon.svg');
@@ -465,7 +460,7 @@ export default function App() {
                     activeSlideEmbedUrl ? (
                       <iframe
                         key={`${activeSlideEmbedUrl}-${slideVideoResetNonce}`}
-                        className={cn(
+                       className={cn(
                           'w-full h-full',
                           isFullscreen && isFullscreenNotesHidden && 'h-screen w-screen'
                         )}
@@ -647,7 +642,7 @@ export default function App() {
             ) : (
               isEmbeddedWatchUrl ? (
                 <iframe
-                  className="w-full h-full"
+                 className="w-full h-full"
                   src={activeSectionWatchEmbedUrl ?? activeSectionWatchUrl}
                   title="Watch demo video player"
                   frameBorder="0"
