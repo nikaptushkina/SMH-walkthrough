@@ -28,6 +28,7 @@ export default function App() {
   const [isFullscreenNotesHidden, setIsFullscreenNotesHidden] = useState(false);
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
   const [isBottomControlsVisible, setIsBottomControlsVisible] = useState(false);
+  const [slideVideoResetNonce, setSlideVideoResetNonce] = useState(0);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const activeAudioUrlRef = useRef<string | null>(null);
@@ -45,9 +46,18 @@ export default function App() {
     const match = url.match(/drive\.google\.com\/file\/d\/([^/]+)/i);
     return match?.[1];
   };
-  const toGoogleDrivePreviewUrl = (url: string) => {
+  const toGoogleDrivePreviewUrl = (url: string, autoplay = false) => {
     const fileId = getGoogleDriveFileId(url);
-    return fileId ? `https://drive.google.com/file/d/${fileId}/preview` : null;
+    if (!fileId) {
+      return null;
+    }
+
+    const params = new URLSearchParams({
+      rm: 'minimal',
+      autoplay: autoplay ? '1' : '0',
+    });
+
+    return `https://drive.google.com/file/d/${fileId}/preview?${params.toString()}`;
   };
   const resolveMediaUrl = (url: string) => {
     if (/^(https?:)?\/\//.test(url) || url.startsWith('data:') || url.startsWith('blob:')) {
@@ -63,8 +73,8 @@ export default function App() {
   };
   const activeSlideMediaUrl = resolveMediaUrl(activeSlide.mediaUrl);
   const activeSectionWatchUrl = resolveMediaUrl(activeSection.watchVideoUrl);
-  const activeSlideEmbedUrl = toGoogleDrivePreviewUrl(activeSlideMediaUrl);
-  const activeSectionWatchEmbedUrl = toGoogleDrivePreviewUrl(activeSectionWatchUrl);
+  const activeSlideEmbedUrl = toGoogleDrivePreviewUrl(activeSlideMediaUrl, true);
+  const activeSectionWatchEmbedUrl = toGoogleDrivePreviewUrl(activeSectionWatchUrl, true);
   const activeSectionCaptionsUrl = activeSection.watchCaptionsUrl
     ? resolveMediaUrl(activeSection.watchCaptionsUrl)
     : undefined;
@@ -120,28 +130,40 @@ export default function App() {
     /^https?:\/\/(www\.)?(youtube\.com|player\.vimeo\.com)\//.test(activeSectionWatchUrl) ||
     Boolean(activeSectionWatchEmbedUrl);
 
+  const restartActiveSlideVideo = () => {
+    if (viewMode !== 'browse' || activeSlide.mediaType !== 'video') {
+      return;
+    }
+
+    if (activeSlideEmbedUrl) {
+      setSlideVideoResetNonce((value) => value + 1);
+      return;
+    }
+
+    if (browseVideoRef.current) {
+      browseVideoRef.current.currentTime = 0;
+      void browseVideoRef.current.play().catch(() => {
+        // Ignore playback rejections caused by browser autoplay policies.
+      });
+    }
+  };
+
   const playSlideAudio = (restart = false) => {
     if (!activeSlide?.audioUrl) {
       return;
     }
 
-    const shouldSyncWithVideo = viewMode === 'browse' && activeSlide.mediaType === 'video';
-    if (shouldSyncWithVideo) {
-      restart = true;
-      if (browseVideoRef.current) {
-        browseVideoRef.current.currentTime = 0;
-        void browseVideoRef.current.play().catch(() => {
-          // Ignore playback rejections caused by browser autoplay policies.
-        });
-      }
+    const shouldRestartMedia = restart || (viewMode === 'browse' && activeSlide.mediaType === 'video');
+
+    if (shouldRestartMedia) {
+      restartActiveSlideVideo();
     }
 
-    if (
-      audioRef.current &&
-      !restart &&
-      activeAudioUrlRef.current === activeSlide.audioUrl &&
-      audioRef.current.paused
-    ) {
+    if (audioRef.current && activeAudioUrlRef.current === activeSlide.audioUrl) {
+      if (shouldRestartMedia) {
+        audioRef.current.currentTime = 0;
+      }
+
       void audioRef.current.play();
       setIsAudioPlaying(true);
       return;
@@ -442,6 +464,7 @@ export default function App() {
                   {activeSlide.mediaType === 'video' ? (
                     activeSlideEmbedUrl ? (
                       <iframe
+                        key={`${activeSlideEmbedUrl}-${slideVideoResetNonce}`}
                         className={cn(
                           'w-full h-full',
                           isFullscreen && isFullscreenNotesHidden && 'h-screen w-screen'
@@ -449,7 +472,7 @@ export default function App() {
                         src={activeSlideEmbedUrl}
                         title={`${activeSection.title} slide ${activeSlideIndex + 1} video`}
                         frameBorder="0"
-                        allow="autoplay; encrypted-media; picture-in-picture"
+                        allow="autoplay; encrypted-media"
                         allowFullScreen
                       />
                     ) : (
@@ -628,7 +651,7 @@ export default function App() {
                   src={activeSectionWatchEmbedUrl ?? activeSectionWatchUrl}
                   title="Watch demo video player"
                   frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
                   allowFullScreen
                 />
               ) : (
