@@ -41,6 +41,14 @@ export default function App() {
   const activeSlide = activeSection.slides[activeSlideIndex];
   const isFullscreenBrowse = viewMode === 'browse' && isFullscreen;
   const showFullscreenNotesPanel = !(isFullscreenBrowse && isFullscreenNotesHidden);
+    const getGoogleDriveFileId = (url: string) => {
+    const match = url.match(/drive\.google\.com\/file\/d\/([^/]+)/i);
+    return match?.[1];
+  };
+  const toGoogleDrivePreviewUrl = (url: string) => {
+    const fileId = getGoogleDriveFileId(url);
+    return fileId ? `https://drive.google.com/file/d/${fileId}/preview` : null;
+  };
   const resolveMediaUrl = (url: string) => {
     if (/^(https?:)?\/\//.test(url) || url.startsWith('data:') || url.startsWith('blob:')) {
       return url;
@@ -55,6 +63,8 @@ export default function App() {
   };
   const activeSlideMediaUrl = resolveMediaUrl(activeSlide.mediaUrl);
   const activeSectionWatchUrl = resolveMediaUrl(activeSection.watchVideoUrl);
+  const activeSlideEmbedUrl = toGoogleDrivePreviewUrl(activeSlideMediaUrl);
+  const activeSectionWatchEmbedUrl = toGoogleDrivePreviewUrl(activeSectionWatchUrl);
   const activeSectionCaptionsUrl = activeSection.watchCaptionsUrl
     ? resolveMediaUrl(activeSection.watchCaptionsUrl)
     : undefined;
@@ -106,9 +116,9 @@ export default function App() {
   );
   const hasSlideAudio = Boolean(activeSlide?.audioUrl);
   const isLastSlide = activeSlideIndex === activeSection.slides.length - 1;
-  const isEmbeddedWatchUrl = /^https?:\/\/(www\.)?(youtube\.com|player\.vimeo\.com)\//.test(
-    activeSectionWatchUrl
-  );
+  const isEmbeddedWatchUrl =
+    /^https?:\/\/(www\.)?(youtube\.com|player\.vimeo\.com)\//.test(activeSectionWatchUrl) ||
+    Boolean(activeSectionWatchEmbedUrl);
 
   const playSlideAudio = (restart = false) => {
     if (!activeSlide?.audioUrl) {
@@ -430,22 +440,36 @@ export default function App() {
                   )}
                 >
                   {activeSlide.mediaType === 'video' ? (
-	                    <video
-	                      ref={browseVideoRef}
-	                      key={activeSlideMediaUrl}
-	                      src={activeSlideMediaUrl}
-	                      className={cn(
-	                        'demo-video object-contain',
-	                        isFullscreen && isFullscreenNotesHidden
-	                          ? 'h-screen w-screen max-h-none max-w-none rounded-none'
-	                          : 'w-full h-full'
-	                      )}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      controls
-                    />
+                    activeSlideEmbedUrl ? (
+                      <iframe
+                        className={cn(
+                          'w-full h-full',
+                          isFullscreen && isFullscreenNotesHidden && 'h-screen w-screen'
+                        )}
+                        src={activeSlideEmbedUrl}
+                        title={`${activeSection.title} slide ${activeSlideIndex + 1} video`}
+                        frameBorder="0"
+                        allow="autoplay; encrypted-media; picture-in-picture"
+                        allowFullScreen
+                      />
+                    ) : (
+                      <video
+                        ref={browseVideoRef}
+                        key={activeSlideMediaUrl}
+                        src={activeSlideMediaUrl}
+                        className={cn(
+                          'demo-video object-contain',
+                          isFullscreen && isFullscreenNotesHidden
+                            ? 'h-screen w-screen max-h-none max-w-none rounded-none'
+                            : 'w-full h-full'
+                        )}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        controls
+                      />
+                    )
                   ) : (
                     <img
                       src={activeSlideMediaUrl}
@@ -601,7 +625,7 @@ export default function App() {
               isEmbeddedWatchUrl ? (
                 <iframe
                   className="w-full h-full"
-                  src={activeSectionWatchUrl}
+                  src={activeSectionWatchEmbedUrl ?? activeSectionWatchUrl}
                   title="Watch demo video player"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
