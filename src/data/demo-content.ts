@@ -53,7 +53,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
         bullets: ['Shop floor to top floor connection', 'PDF Solutions & SAP'],
       },
       {
-        mediaUrl: 'https://drive.google.com/file/d/19X-7SFSyg5uQC49-EnSIBoHZN0Gu8GjD/view?usp=drive_link',
+        mediaUrl: '/Section 1 - Slide 2.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 2.mp3',
         bullets: ['Yield, materials, and cycle time drive cost', 'Manufacturing impacts finance'],
@@ -65,7 +65,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
         bullets: ['Visibility gap between operations and finance', 'Speed of action matters'],
       },
       {
-        mediaUrl: 'https://drive.google.com/file/d/1CnZePzXubh0Y2k2hcMECh0Hosf57-DrJ/view?usp=drive_link',
+        mediaUrl: '/Section 1 - Slide 4.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 4.mp3',
         bullets: ['Highly complex semiconductor manufacturing', 'ERP captures summarized data only'],
@@ -89,7 +89,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
         bullets: ['PDF Solutions and SAP partnership', 'Financial and operational data unified', 'Faster deployment of proven use cases', 'ROI from day one', 'SMH introduced as unified data layer'],
       },
       {
-        mediaUrl: 'https://drive.google.com/file/d/1kEEN7WVskEJzsmiGNqC_pfMGA96KT7fl/view?usp=drive_link',
+        mediaUrl: '/Section 1 - Slide 8.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 8.mp3',
         bullets: ['Enterprise integration platform', 'Connects factory systems to SAP', 'Manufacturing events standardized', 'Finance‑ready milestones created', 'Granularity differences reconciled', 'Single consistent source of truth'],
@@ -101,25 +101,25 @@ export const DEMO_SECTIONS: DemoSection[] = [
         bullets: ['Manufacturing flows are non‑linear', 'Splits, merges, and rework are common', 'SAP production consistency maintained'],
       },
       {
-        mediaUrl: 'https://drive.google.com/file/d/1ZEjD_y7pLzTmkG1ls7v7dk9vNeTHMH3h/view?usp=drive_link',
+        mediaUrl: '/Section 1 - Slide 10.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 10.mp3',
         bullets: ['End‑to‑end process example', 'SAP creates production order', 'Order ready for shop‑floor execution'],
       },
       {
-        mediaUrl: 'https://drive.google.com/file/d/1nOKbJy_gXjR4X_gxeEkmAUWorzptwLyO/view?usp=drive_link',
+        mediaUrl: '/Section 1 - Slide 11.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 11.mp3',
         bullets: ['SMH orchestrates production order', 'Manufacturing lot created', 'Operational data routed to MES', 'Execution begins'],
       },
       {
-        mediaUrl: 'https://drive.google.com/file/d/1ZlOvm6A_D_wvA4HTkb2IAA6AfCW_SAjx/view?usp=drive_link',
+        mediaUrl: '/Section 1 - Slide 12.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 12.mp3',
         bullets: ['MES events captured during execution', 'Thousands of steps aggregated', 'Clean milestone updates sent to SAP', 'Reusable integration routes'],
       },
       {
-        mediaUrl: 'https://drive.google.com/file/d/1OX_X6z4mmZ_hmFyXr7ZePp4ApwDDKeiI/view?usp=drive_link',
+        mediaUrl: '/Section 1 - Slide 13.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 13.mp3',
         bullets: ['Reduced interface build and maintenance cost', 'Faster deployments', 'Improved traceability', 'Higher operational throughput', 'Consistent manufacturing data across sites and MES'],
@@ -156,7 +156,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
         bullets: ['SMH ensures complete production data', 'Next step is using that data'],
       },
       {
-        mediaUrl: 'https://drive.google.com/file/d/1Jg4ZS_cBJDwnPZbhaUOsbmawUngoBCQ_/view?usp=drive_link',
+        mediaUrl: '/Section 2 - Slide 3.mp4',
         audioUrl: '/Section 2 - Audio 3.mp3',
         mediaType: 'video',
         bullets: ['SAP Joule introduced', 'Turning data into insight'],
@@ -193,7 +193,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
         bullets: ['PDF Operational Product Costing module'],
       },
       {
-        mediaUrl: 'https://drive.google.com/file/d/13jslTuLQaKQ-ZNonB09NnJzxqrqcpWM5/view?usp=drive_link',
+        mediaUrl: '/Section 3 - Slide 2.mp4',
         mediaType: 'video',
         audioUrl: '/Section 3 - Audio 2.mp3',
         bullets: ['End‑to‑end finance and operations visibility', 'Real‑time cost awareness'],
@@ -205,7 +205,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
         audioUrl: '/Section 3 - Audio 3.mp3',
       },
       {
-        mediaUrl: 'https://drive.google.com/file/d/187Q1kpYUjN5G-hPlNEgRrDxeF9g1sYxm/view?usp=drive_link',
+        mediaUrl: '/Section 3 - Slide 4.mp4',
         audioUrl: '/Section 3 - Audio 4.mp3',
         mediaType: 'video',
         bullets: ['Multiple analytical dashboards', 'Finance and operations perspectives'],
@@ -217,19 +217,19 @@ export const DEMO_SECTIONS: DemoSection[] = [
         bullets: ['Identify issues by technology node'],
       },
       {
-        mediaUrl: 'https://drive.google.com/file/d/1fRn7W7MGgAk306MRRU8muWCMYhugZ2kF/view?usp=drive_link',
+        mediaUrl: '/Section 3 - Slide 6.mp4',
         mediaType: 'video',
         audioUrl: '/Section 3 - Audio 6.mp3',
         bullets: ['Select product and fab', 'Drill into cost drivers', 'MES operation variances'],
       },
       {
-        mediaUrl: 'https://drive.google.com/file/d/16h-w4i09RIZAZ6yLJNUFo3Q9rZUhEnHI/view?usp=drive_link',
+        mediaUrl: '/Section 3 - Slide 7.mp4',
         mediaType: 'video',
         audioUrl: '/Section 3 - Audio 7.mp3',
         bullets: ['Use natural‑language queries', 'Explore cost drivers with Joule'],
       },
       {
-        mediaUrl: 'https://drive.google.com/file/d/1iZx8RVCSMSq4yUFQ7dfXEIT6z7Fe-V3M/view?usp=drive_link',
+        mediaUrl: '/Section 3 - Slide 8.mp4',
         mediaType: 'video',
         audioUrl: '/Section 3 - Audio 8.mp3',
         bullets: ['Prioritize top cost issues', 'Rank by impact and risk'],
