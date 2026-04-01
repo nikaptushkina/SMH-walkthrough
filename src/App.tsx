@@ -61,10 +61,10 @@ export default function App() {
 
     const baseUrl = import.meta.env.BASE_URL ?? '/';
     if (url.startsWith('/')) {
-      return `${baseUrl}${url.slice(1)}`;
+      return `${baseUrl}${encodeURI(url.slice(1))}`;
     }
 
-    return `${baseUrl}${url}`;
+    return `${baseUrl}${encodeURI(url)}`;
   };
   const activeSlideMediaUrl = resolveMediaUrl(activeSlide.mediaUrl);
   const activeSectionWatchUrl = resolveMediaUrl(activeSection.watchVideoUrl);
