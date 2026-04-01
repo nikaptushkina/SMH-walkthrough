@@ -53,7 +53,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
         bullets: ['Shop floor to top floor connection', 'PDF Solutions & SAP'],
       },
       {
-        mediaUrl: '/Section 1 - Slide 2.mp4',
+        mediaUrl: 'https://media.githubusercontent.com/media/nikaptushkina/SMH-walkthrough/main/public/Section%201%20-%20Slide%202.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 2.mp3',
         bullets: ['Yield, materials, and cycle time drive cost', 'Manufacturing impacts finance'],
@@ -65,7 +65,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
         bullets: ['Visibility gap between operations and finance', 'Speed of action matters'],
       },
       {
-        mediaUrl: '/Section 1 - Slide 4.mp4',
+        mediaUrl: 'https://media.githubusercontent.com/media/nikaptushkina/SMH-walkthrough/main/public/Section%201%20-%20Slide%204.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 4.mp3',
         bullets: ['Highly complex semiconductor manufacturing', 'ERP captures summarized data only'],
@@ -89,7 +89,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
         bullets: ['PDF Solutions and SAP partnership', 'Financial and operational data unified', 'Faster deployment of proven use cases', 'ROI from day one', 'SMH introduced as unified data layer'],
       },
       {
-        mediaUrl: '/Section 1 - Slide 8.mp4',
+        mediaUrl: 'https://media.githubusercontent.com/media/nikaptushkina/SMH-walkthrough/main/public/Section%201%20-%20Slide%208.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 8.mp3',
         bullets: ['Enterprise integration platform', 'Connects factory systems to SAP', 'Manufacturing events standardized', 'Finance‑ready milestones created', 'Granularity differences reconciled', 'Single consistent source of truth'],
@@ -101,25 +101,25 @@ export const DEMO_SECTIONS: DemoSection[] = [
         bullets: ['Manufacturing flows are non‑linear', 'Splits, merges, and rework are common', 'SAP production consistency maintained'],
       },
       {
-        mediaUrl: '/Section 1 - Slide 10.mp4',
+        mediaUrl: 'https://media.githubusercontent.com/media/nikaptushkina/SMH-walkthrough/main/public/Section%201%20-%20Slide%2010.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 10.mp3',
         bullets: ['End‑to‑end process example', 'SAP creates production order', 'Order ready for shop‑floor execution'],
       },
       {
-        mediaUrl: '/Section 1 - Slide 11.mp4',
+        mediaUrl: 'https://media.githubusercontent.com/media/nikaptushkina/SMH-walkthrough/main/public/Section%201%20-%20Slide%2011.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 11.mp3',
         bullets: ['SMH orchestrates production order', 'Manufacturing lot created', 'Operational data routed to MES', 'Execution begins'],
       },
       {
-        mediaUrl: '/Section 1 - Slide 12.mp4',
+        mediaUrl: 'https://media.githubusercontent.com/media/nikaptushkina/SMH-walkthrough/main/public/Section%201%20-%20Slide%2012.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 12.mp3',
         bullets: ['MES events captured during execution', 'Thousands of steps aggregated', 'Clean milestone updates sent to SAP', 'Reusable integration routes'],
       },
       {
-        mediaUrl: '/Section 1 - Slide 13.mp4',
+        mediaUrl: 'https://media.githubusercontent.com/media/nikaptushkina/SMH-walkthrough/main/public/Section%201%20-%20Slide%2013.mp4',
         mediaType: 'video',
         audioUrl: '/Section 1 - Audio 13.mp3',
         bullets: ['Reduced interface build and maintenance cost', 'Faster deployments', 'Improved traceability', 'Higher operational throughput', 'Consistent manufacturing data across sites and MES'],
@@ -156,7 +156,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
         bullets: ['SMH ensures complete production data', 'Next step is using that data'],
       },
       {
-        mediaUrl: '/Section 2 - Slide 3.mp4',
+        mediaUrl: 'https://media.githubusercontent.com/media/nikaptushkina/SMH-walkthrough/main/public/Section%202%20-%20Slide%203.mp4',
         audioUrl: '/Section 2 - Audio 3.mp3',
         mediaType: 'video',
         bullets: ['SAP Joule introduced', 'Turning data into insight'],
@@ -193,7 +193,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
         bullets: ['PDF Operational Product Costing module'],
       },
       {
-        mediaUrl: '/Section 3 - Slide 2.mp4',
+        mediaUrl: 'https://media.githubusercontent.com/media/nikaptushkina/SMH-walkthrough/main/public/Section%203%20-%20Slide%202.mp4',
         mediaType: 'video',
         audioUrl: '/Section 3 - Audio 2.mp3',
         bullets: ['End‑to‑end finance and operations visibility', 'Real‑time cost awareness'],
@@ -205,7 +205,7 @@ export const DEMO_SECTIONS: DemoSection[] = [
         audioUrl: '/Section 3 - Audio 3.mp3',
       },
       {
-        mediaUrl: '/Section 3 - Slide 4.mp4',
+        mediaUrl: 'https://media.githubusercontent.com/media/nikaptushkina/SMH-walkthrough/main/public/Section%203%20-%20Slide%204.mp4',
         audioUrl: '/Section 3 - Audio 4.mp3',
         mediaType: 'video',
         bullets: ['Multiple analytical dashboards', 'Finance and operations perspectives'],
@@ -217,19 +217,19 @@ export const DEMO_SECTIONS: DemoSection[] = [
         bullets: ['Identify issues by technology node'],
       },
       {
-        mediaUrl: '/Section 3 - Slide 6.mp4',
+        mediaUrl: 'https://media.githubusercontent.com/media/nikaptushkina/SMH-walkthrough/main/public/Section%203%20-%20Slide%206.mp4',
         mediaType: 'video',
         audioUrl: '/Section 3 - Audio 6.mp3',
         bullets: ['Select product and fab', 'Drill into cost drivers', 'MES operation variances'],
       },
       {
-        mediaUrl: '/Section 3 - Slide 7.mp4',
+        mediaUrl: 'https://media.githubusercontent.com/media/nikaptushkina/SMH-walkthrough/main/public/Section%203%20-%20Slide%207.mp4',
         mediaType: 'video',
         audioUrl: '/Section 3 - Audio 7.mp3',
         bullets: ['Use natural‑language queries', 'Explore cost drivers with Joule'],
       },
       {
-        mediaUrl: '/Section 3 - Slide 8.mp4',
+        mediaUrl: 'https://media.githubusercontent.com/media/nikaptushkina/SMH-walkthrough/main/public/Section%203%20-%20Slide%208.mp4',
         mediaType: 'video',
         audioUrl: '/Section 3 - Audio 8.mp3',
         bullets: ['Prioritize top cost issues', 'Rank by impact and risk'],
