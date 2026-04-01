@@ -148,13 +148,22 @@ export default function App() {
       return;
     }
 
-    const shouldRestartMedia = restart || (viewMode === 'browse' && activeSlide.mediaType === 'video');
+    const isSameAudio = Boolean(audioRef.current && activeAudioUrlRef.current === activeSlide.audioUrl);
+    const isResumingPausedAudio = Boolean(
+      isSameAudio &&
+        audioRef.current &&
+        audioRef.current.paused &&
+        audioRef.current.currentTime > 0 &&
+        !restart
+    );
+    const shouldRestartMedia =
+      !isResumingPausedAudio && (restart || (viewMode === 'browse' && activeSlide.mediaType === 'video'));
 
     if (shouldRestartMedia) {
       restartActiveSlideVideo();
     }
 
-    if (audioRef.current && activeAudioUrlRef.current === activeSlide.audioUrl) {
+    if (isSameAudio && audioRef.current) {
       if (shouldRestartMedia) {
         audioRef.current.currentTime = 0;
       }
