@@ -36,6 +36,7 @@ export default function App() {
   const browseVideoRef = useRef<HTMLVideoElement | null>(null);
   const watchVideoRef = useRef<HTMLVideoElement | null>(null);
   const lastScrollYRef = useRef(0);
+  const [browseVideoInstanceKey, setBrowseVideoInstanceKey] = useState(0);
 
   const activeSlideIndex = slideIndexBySection[activeSection.id] ?? 0;
   const activeSlide = activeSection.slides[activeSlideIndex];
@@ -48,6 +49,10 @@ export default function App() {
   const toGoogleDrivePreviewUrl = (url: string) => {
     const fileId = getGoogleDriveFileId(url);
     return fileId ? `https://drive.google.com/file/d/${fileId}/preview` : null;
+  };
+  const toGoogleDriveStreamUrl = (url: string) => {
+    const fileId = getGoogleDriveFileId(url);
+    return fileId ? `https://drive.google.com/uc?export=download&id=${fileId}&hd=1` : null;
   };
   const resolveMediaUrl = (url: string) => {
     if (/^(https?:)?\/\//.test(url) || url.startsWith('data:') || url.startsWith('blob:')) {
@@ -63,7 +68,9 @@ export default function App() {
   };
   const activeSlideMediaUrl = resolveMediaUrl(activeSlide.mediaUrl);
   const activeSectionWatchUrl = resolveMediaUrl(activeSection.watchVideoUrl);
+  const activeSlideStreamUrl = toGoogleDriveStreamUrl(activeSlideMediaUrl);
   const activeSlideEmbedUrl = toGoogleDrivePreviewUrl(activeSlideMediaUrl);
+  const activeSectionWatchStreamUrl = toGoogleDriveStreamUrl(activeSectionWatchUrl);
   const activeSectionWatchEmbedUrl = toGoogleDrivePreviewUrl(activeSectionWatchUrl);
   const activeSectionCaptionsUrl = activeSection.watchCaptionsUrl
     ? resolveMediaUrl(activeSection.watchCaptionsUrl)
@@ -117,8 +124,7 @@ export default function App() {
   const hasSlideAudio = Boolean(activeSlide?.audioUrl);
   const isLastSlide = activeSlideIndex === activeSection.slides.length - 1;
   const isEmbeddedWatchUrl =
-    /^https?:\/\/(www\.)?(youtube\.com|player\.vimeo\.com)\//.test(activeSectionWatchUrl) ||
-    Boolean(activeSectionWatchEmbedUrl);
+    /^https?:\/\/(www\.)?(youtube\.com|player\.vimeo\.com)\//.test(activeSectionWatchUrl);
 
   const playSlideAudio = (restart = false) => {
     if (!activeSlide?.audioUrl) {
@@ -128,7 +134,9 @@ export default function App() {
     const shouldSyncWithVideo = viewMode === 'browse' && activeSlide.mediaType === 'video';
     if (shouldSyncWithVideo) {
       restart = true;
-      if (browseVideoRef.current) {
+      if (activeSlideEmbedUrl) {
+        setBrowseVideoInstanceKey((prev) => prev + 1);
+      } else if (browseVideoRef.current) {
         browseVideoRef.current.currentTime = 0;
         void browseVideoRef.current.play().catch(() => {
           // Ignore playback rejections caused by browser autoplay policies.
@@ -173,6 +181,9 @@ export default function App() {
     }
 
     audioRef.current.pause();
+    if (viewMode === 'browse' && activeSlide.mediaType === 'video') {
+      browseVideoRef.current?.pause();
+    }
     setIsAudioPlaying(false);
   };
 
@@ -440,36 +451,22 @@ export default function App() {
                   )}
                 >
                   {activeSlide.mediaType === 'video' ? (
-                    activeSlideEmbedUrl ? (
-                      <iframe
-                        className={cn(
-                          'w-full h-full',
-                          isFullscreen && isFullscreenNotesHidden && 'h-screen w-screen'
-                        )}
-                        src={activeSlideEmbedUrl}
-                        title={`${activeSection.title} slide ${activeSlideIndex + 1} video`}
-                        frameBorder="0"
-                        allow="autoplay; encrypted-media; picture-in-picture"
-                        allowFullScreen
-                      />
-                    ) : (
-                      <video
-                        ref={browseVideoRef}
-                        key={activeSlideMediaUrl}
-                        src={activeSlideMediaUrl}
-                        className={cn(
-                          'demo-video object-contain',
-                          isFullscreen && isFullscreenNotesHidden
-                            ? 'h-screen w-screen max-h-none max-w-none rounded-none'
-                            : 'w-full h-full'
-                        )}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        controls
-                      />
-                    )
+                    <video
+                      ref={browseVideoRef}
+                      key={`${activeSlideMediaUrl}-${browseVideoInstanceKey}`}
+                      src={activeSlideStreamUrl ?? activeSlideMediaUrl}
+                      className={cn(
+                        'demo-video object-contain',
+                        isFullscreen && isFullscreenNotesHidden
+                          ? 'h-screen w-screen max-h-none max-w-none rounded-none'
+                          : 'w-full h-full'
+                      )}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      controls
+                    />
                   ) : (
                     <img
                       src={activeSlideMediaUrl}
@@ -634,8 +631,8 @@ export default function App() {
               ) : (
                 <video
                   ref={watchVideoRef}
-                  key={activeSectionWatchUrl}
-                  src={activeSectionWatchUrl}
+                  key={activeSectionWatchStreamUrl ?? activeSectionWatchUrl}
+                  src={activeSectionWatchStreamUrl ?? activeSectionWatchUrl}
                   className="demo-video w-full h-full"
                   controls
                   playsInline
