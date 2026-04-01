@@ -52,7 +52,11 @@ export default function App() {
   };
   const toGoogleDriveStreamUrl = (url: string) => {
     const fileId = getGoogleDriveFileId(url);
-    return fileId ? `https://drive.google.com/uc?export=download&id=${fileId}&hd=1` : null;
+    return fileId ? `https://drive.google.com/uc?export=view&id=${fileId}&hd=1` : null;
+  };
+  const toGoogleDriveFallbackStreamUrl = (url: string) => {
+    const fileId = getGoogleDriveFileId(url);
+    return fileId ? `https://drive.google.com/uc?id=${fileId}` : null;
   };
   const resolveMediaUrl = (url: string) => {
     if (/^(https?:)?\/\//.test(url) || url.startsWith('data:') || url.startsWith('blob:')) {
@@ -70,8 +74,10 @@ export default function App() {
   const activeSectionWatchUrl = resolveMediaUrl(activeSection.watchVideoUrl);
   const activeSlideStreamUrl = toGoogleDriveStreamUrl(activeSlideMediaUrl);
   const activeSlideEmbedUrl = toGoogleDrivePreviewUrl(activeSlideMediaUrl);
+  const activeSlideFallbackStreamUrl = toGoogleDriveFallbackStreamUrl(activeSlideMediaUrl);
   const activeSectionWatchStreamUrl = toGoogleDriveStreamUrl(activeSectionWatchUrl);
   const activeSectionWatchEmbedUrl = toGoogleDrivePreviewUrl(activeSectionWatchUrl);
+  const activeSectionWatchFallbackStreamUrl = toGoogleDriveFallbackStreamUrl(activeSectionWatchUrl);
   const activeSectionCaptionsUrl = activeSection.watchCaptionsUrl
     ? resolveMediaUrl(activeSection.watchCaptionsUrl)
     : undefined;
@@ -185,6 +191,21 @@ export default function App() {
       browseVideoRef.current?.pause();
     }
     setIsAudioPlaying(false);
+  };
+
+  const handleVideoLoadError = (event: React.SyntheticEvent<HTMLVideoElement>) => {
+    const video = event.currentTarget;
+    const fallbackUrl = video.dataset.fallbackUrl;
+    if (!fallbackUrl || video.dataset.fallbackUsed === 'true') {
+      return;
+    }
+
+    video.dataset.fallbackUsed = 'true';
+    video.src = fallbackUrl;
+    video.load();
+    void video.play().catch(() => {
+      // Ignore fallback autoplay rejections caused by browser autoplay policies.
+    });
   };
 
   const disableWatchCaptionsByDefault = () => {
@@ -466,6 +487,8 @@ export default function App() {
                       muted
                       playsInline
                       controls
+                      data-fallback-url={activeSlideFallbackStreamUrl ?? undefined}
+                      onError={handleVideoLoadError}
                     />
                   ) : (
                     <img
@@ -637,6 +660,8 @@ export default function App() {
                   controls
                   playsInline
                   onLoadedMetadata={disableWatchCaptionsByDefault}
+                  data-fallback-url={activeSectionWatchFallbackStreamUrl ?? undefined}
+                  onError={handleVideoLoadError}
                 >
                   {activeSectionCaptionsUrl && (
                     <track
