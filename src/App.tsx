@@ -28,7 +28,6 @@ export default function App() {
   const [isFullscreenNotesHidden, setIsFullscreenNotesHidden] = useState(false);
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
   const [isBottomControlsVisible, setIsBottomControlsVisible] = useState(false);
-  const [slideVideoRestartToken, setSlideVideoRestartToken] = useState(0);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const activeAudioUrlRef = useRef<string | null>(null);
@@ -46,27 +45,9 @@ export default function App() {
     const match = url.match(/drive\.google\.com\/file\/d\/([^/]+)/i);
     return match?.[1];
   };
-  const toGoogleDrivePreviewUrl = (url: string, options?: { autoplay?: boolean; reloadToken?: number }) => {
+  const toGoogleDrivePreviewUrl = (url: string) => {
     const fileId = getGoogleDriveFileId(url);
-    if (!fileId) {
-      return null;
-    }
-
-    const params = new URLSearchParams({
-      rm: 'minimal',
-      hd: '1',
-    });
-
-    if (options?.autoplay) {
-      params.set('autoplay', '1');
-      params.set('mute', '1');
-    }
-
-    if (typeof options?.reloadToken === 'number' && options.reloadToken > 0) {
-      params.set('t', String(options.reloadToken));
-    }
-
-    return `https://drive.google.com/file/d/${fileId}/preview?${params.toString()}`;
+    return fileId ? `https://drive.google.com/file/d/${fileId}/preview` : null;
   };
   const resolveMediaUrl = (url: string) => {
     if (/^(https?:)?\/\//.test(url) || url.startsWith('data:') || url.startsWith('blob:')) {
@@ -82,11 +63,8 @@ export default function App() {
   };
   const activeSlideMediaUrl = resolveMediaUrl(activeSlide.mediaUrl);
   const activeSectionWatchUrl = resolveMediaUrl(activeSection.watchVideoUrl);
-  const activeSlideEmbedUrl = toGoogleDrivePreviewUrl(activeSlideMediaUrl, {
-    autoplay: true,
-    reloadToken: slideVideoRestartToken,
-  });
-  const activeSectionWatchEmbedUrl = toGoogleDrivePreviewUrl(activeSectionWatchUrl, { autoplay: true });
+  const activeSlideEmbedUrl = toGoogleDrivePreviewUrl(activeSlideMediaUrl);
+  const activeSectionWatchEmbedUrl = toGoogleDrivePreviewUrl(activeSectionWatchUrl);
   const activeSectionCaptionsUrl = activeSection.watchCaptionsUrl
     ? resolveMediaUrl(activeSection.watchCaptionsUrl)
     : undefined;
@@ -150,10 +128,6 @@ export default function App() {
     const shouldSyncWithVideo = viewMode === 'browse' && activeSlide.mediaType === 'video';
     if (shouldSyncWithVideo) {
       restart = true;
-      if (activeSlideEmbedUrl) {
-        setSlideVideoRestartToken((prev) => prev + 1);
-      }
-
       if (browseVideoRef.current) {
         browseVideoRef.current.currentTime = 0;
         void browseVideoRef.current.play().catch(() => {
@@ -468,7 +442,6 @@ export default function App() {
                   {activeSlide.mediaType === 'video' ? (
                     activeSlideEmbedUrl ? (
                       <iframe
-                        key={`${activeSlideEmbedUrl}-${slideVideoRestartToken}`}
                         className={cn(
                           'w-full h-full',
                           isFullscreen && isFullscreenNotesHidden && 'h-screen w-screen'
@@ -651,7 +624,6 @@ export default function App() {
             ) : (
               isEmbeddedWatchUrl ? (
                 <iframe
-                  key={activeSectionWatchEmbedUrl ?? activeSectionWatchUrl}
                   className="w-full h-full"
                   src={activeSectionWatchEmbedUrl ?? activeSectionWatchUrl}
                   title="Watch demo video player"
