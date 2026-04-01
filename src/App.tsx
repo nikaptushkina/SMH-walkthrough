@@ -28,6 +28,7 @@ export default function App() {
   const [isFullscreenNotesHidden, setIsFullscreenNotesHidden] = useState(false);
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
   const [isBottomControlsVisible, setIsBottomControlsVisible] = useState(false);
+  const [slideVideoResetNonce, setSlideVideoResetNonce] = useState(0);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const activeAudioUrlRef = useRef<string | null>(null);
@@ -67,10 +68,9 @@ export default function App() {
   };
   const activeSlideMediaUrl = resolveMediaUrl(activeSlide.mediaUrl);
   const activeSectionWatchUrl = resolveMediaUrl(activeSection.watchVideoUrl);
-  const browseSlideVideoUrl = resolveMediaUrl(`/Section ${DEMO_SECTIONS.indexOf(activeSection) + 1} - Slide ${activeSlideIndex + 1}.mp4`);
+  const activeSlideEmbedUrl = toGoogleDrivePreviewUrl(activeSlideMediaUrl);
   const activeSectionWatchEmbedUrl = toGoogleDrivePreviewUrl(activeSectionWatchUrl);
-  const activeSlideAudioUrl = activeSlide.audioUrl ? resolveMediaUrl(activeSlide.audioUrl) : null;
-  const activeSectionCaptionsUrl = activeSection.watchCaptionsUrl
+ const activeSectionCaptionsUrl = activeSection.watchCaptionsUrl
     ? resolveMediaUrl(activeSection.watchCaptionsUrl)
     : undefined;
   const pdfLogoUrl = resolveMediaUrl('/favicon.svg');
@@ -130,6 +130,11 @@ export default function App() {
       return;
     }
 
+    if (activeSlideEmbedUrl) {
+      setSlideVideoResetNonce((value) => value + 1);
+      return;
+    }
+
     if (browseVideoRef.current) {
       browseVideoRef.current.currentTime = 0;
       void browseVideoRef.current.play().catch(() => {
@@ -139,7 +144,7 @@ export default function App() {
   };
 
   const playSlideAudio = (restart = false) => {
-    if (!activeSlideAudioUrl) {
+    if (!activeSlide?.audioUrl) {
       return;
     }
 
@@ -149,7 +154,7 @@ export default function App() {
       restartActiveSlideVideo();
     }
 
-    if (audioRef.current && activeAudioUrlRef.current === activeSlideAudioUrl) {
+    if (audioRef.current && activeAudioUrlRef.current === activeSlide.audioUrl) {
       if (shouldRestartMedia) {
         audioRef.current.currentTime = 0;
       }
@@ -164,9 +169,9 @@ export default function App() {
       audioRef.current.currentTime = 0;
     }
 
-    const audio = new Audio(activeSlideAudioUrl);
+    const audio = new Audio(activeSlide.audioUrl);
     audioRef.current = audio;
-    activeAudioUrlRef.current = activeSlideAudioUrl;
+    activeAudioUrlRef.current = activeSlide.audioUrl;
     setIsAudioPlaying(true);
 
     audio.onended = () => setIsAudioPlaying(false);
@@ -287,12 +292,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const activeMediaUrl =
-      viewMode === 'browse' && activeSlide.mediaType === 'video'
-        ? browseSlideVideoUrl
-        : viewMode === 'browse'
-          ? activeSlide.mediaUrl
-          : activeSection.watchVideoUrl;
+    const activeMediaUrl = viewMode === 'browse' ? activeSlide.mediaUrl : activeSection.watchVideoUrl;
     const isVideoMedia =
       (viewMode === 'browse' && activeSlide.mediaType === 'video') ||
       (viewMode === 'watch' && !isEmbeddedWatchUrl);
@@ -336,7 +336,6 @@ export default function App() {
     activeSection.watchVideoUrl,
     activeSlide.mediaType,
     activeSlide.mediaUrl,
-    browseSlideVideoUrl,
     isEmbeddedWatchUrl,
     viewMode,
   ]);
@@ -458,22 +457,37 @@ export default function App() {
                   )}
                 >
                   {activeSlide.mediaType === 'video' ? (
-                    <video
-                      ref={browseVideoRef}
-                      key={browseSlideVideoUrl}
-                      src={browseSlideVideoUrl}
-                      className={cn(
-                        'demo-video object-contain',
-                        isFullscreen && isFullscreenNotesHidden
-                          ? 'h-screen w-screen max-h-none max-w-none rounded-none'
-                          : 'w-full h-full'
-                      )}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      controls
-                    />
+                    activeSlideEmbedUrl ? (
+                      <iframe
+                        key={`${activeSlideEmbedUrl}-${slideVideoResetNonce}`}
+                       className={cn(
+                          'w-full h-full',
+                          isFullscreen && isFullscreenNotesHidden && 'h-screen w-screen'
+                        )}
+                        src={activeSlideEmbedUrl}
+                        title={`${activeSection.title} slide ${activeSlideIndex + 1} video`}
+                        frameBorder="0"
+                        allow="autoplay; encrypted-media"
+                        allowFullScreen
+                      />
+                    ) : (
+                      <video
+                        ref={browseVideoRef}
+                        key={activeSlideMediaUrl}
+                        src={activeSlideMediaUrl}
+                        className={cn(
+                          'demo-video object-contain',
+                          isFullscreen && isFullscreenNotesHidden
+                            ? 'h-screen w-screen max-h-none max-w-none rounded-none'
+                            : 'w-full h-full'
+                        )}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        controls
+                      />
+                    )
                   ) : (
                     <img
                       src={activeSlideMediaUrl}
