@@ -36,7 +36,6 @@ export default function App() {
   const browseVideoRef = useRef<HTMLVideoElement | null>(null);
   const watchVideoRef = useRef<HTMLVideoElement | null>(null);
   const lastScrollYRef = useRef(0);
-  const [browseVideoInstanceKey, setBrowseVideoInstanceKey] = useState(0);
 
   const activeSlideIndex = slideIndexBySection[activeSection.id] ?? 0;
   const activeSlide = activeSection.slides[activeSlideIndex];
@@ -49,14 +48,6 @@ export default function App() {
   const toGoogleDrivePreviewUrl = (url: string) => {
     const fileId = getGoogleDriveFileId(url);
     return fileId ? `https://drive.google.com/file/d/${fileId}/preview` : null;
-  };
-  const toGoogleDriveStreamUrl = (url: string) => {
-    const fileId = getGoogleDriveFileId(url);
-    return fileId ? `https://drive.google.com/uc?export=view&id=${fileId}&hd=1` : null;
-  };
-  const toGoogleDriveFallbackStreamUrl = (url: string) => {
-    const fileId = getGoogleDriveFileId(url);
-    return fileId ? `https://drive.google.com/uc?id=${fileId}` : null;
   };
   const resolveMediaUrl = (url: string) => {
     if (/^(https?:)?\/\//.test(url) || url.startsWith('data:') || url.startsWith('blob:')) {
@@ -72,12 +63,8 @@ export default function App() {
   };
   const activeSlideMediaUrl = resolveMediaUrl(activeSlide.mediaUrl);
   const activeSectionWatchUrl = resolveMediaUrl(activeSection.watchVideoUrl);
-  const activeSlideStreamUrl = toGoogleDriveStreamUrl(activeSlideMediaUrl);
   const activeSlideEmbedUrl = toGoogleDrivePreviewUrl(activeSlideMediaUrl);
-  const activeSlideFallbackStreamUrl = toGoogleDriveFallbackStreamUrl(activeSlideMediaUrl);
-  const activeSectionWatchStreamUrl = toGoogleDriveStreamUrl(activeSectionWatchUrl);
   const activeSectionWatchEmbedUrl = toGoogleDrivePreviewUrl(activeSectionWatchUrl);
-  const activeSectionWatchFallbackStreamUrl = toGoogleDriveFallbackStreamUrl(activeSectionWatchUrl);
   const activeSectionCaptionsUrl = activeSection.watchCaptionsUrl
     ? resolveMediaUrl(activeSection.watchCaptionsUrl)
     : undefined;
@@ -130,7 +117,8 @@ export default function App() {
   const hasSlideAudio = Boolean(activeSlide?.audioUrl);
   const isLastSlide = activeSlideIndex === activeSection.slides.length - 1;
   const isEmbeddedWatchUrl =
-    /^https?:\/\/(www\.)?(youtube\.com|player\.vimeo\.com)\//.test(activeSectionWatchUrl);
+    /^https?:\/\/(www\.)?(youtube\.com|player\.vimeo\.com)\//.test(activeSectionWatchUrl) ||
+    Boolean(activeSectionWatchEmbedUrl);
 
   const playSlideAudio = (restart = false) => {
     if (!activeSlide?.audioUrl) {
@@ -140,9 +128,7 @@ export default function App() {
     const shouldSyncWithVideo = viewMode === 'browse' && activeSlide.mediaType === 'video';
     if (shouldSyncWithVideo) {
       restart = true;
-      if (activeSlideEmbedUrl) {
-        setBrowseVideoInstanceKey((prev) => prev + 1);
-      } else if (browseVideoRef.current) {
+      if (browseVideoRef.current) {
         browseVideoRef.current.currentTime = 0;
         void browseVideoRef.current.play().catch(() => {
           // Ignore playback rejections caused by browser autoplay policies.
@@ -187,25 +173,7 @@ export default function App() {
     }
 
     audioRef.current.pause();
-    if (viewMode === 'browse' && activeSlide.mediaType === 'video') {
-      browseVideoRef.current?.pause();
-    }
     setIsAudioPlaying(false);
-  };
-
-  const handleVideoLoadError = (event: React.SyntheticEvent<HTMLVideoElement>) => {
-    const video = event.currentTarget;
-    const fallbackUrl = video.dataset.fallbackUrl;
-    if (!fallbackUrl || video.dataset.fallbackUsed === 'true') {
-      return;
-    }
-
-    video.dataset.fallbackUsed = 'true';
-    video.src = fallbackUrl;
-    video.load();
-    void video.play().catch(() => {
-      // Ignore fallback autoplay rejections caused by browser autoplay policies.
-    });
   };
 
   const disableWatchCaptionsByDefault = () => {
@@ -472,24 +440,36 @@ export default function App() {
                   )}
                 >
                   {activeSlide.mediaType === 'video' ? (
-                    <video
-                      ref={browseVideoRef}
-                      key={`${activeSlideMediaUrl}-${browseVideoInstanceKey}`}
-                      src={activeSlideStreamUrl ?? activeSlideMediaUrl}
-                      className={cn(
-                        'demo-video object-contain',
-                        isFullscreen && isFullscreenNotesHidden
-                          ? 'h-screen w-screen max-h-none max-w-none rounded-none'
-                          : 'w-full h-full'
-                      )}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      controls
-                      data-fallback-url={activeSlideFallbackStreamUrl ?? undefined}
-                      onError={handleVideoLoadError}
-                    />
+                    activeSlideEmbedUrl ? (
+                      <iframe
+                        className={cn(
+                          'w-full h-full',
+                          isFullscreen && isFullscreenNotesHidden && 'h-screen w-screen'
+                        )}
+                        src={activeSlideEmbedUrl}
+                        title={`${activeSection.title} slide ${activeSlideIndex + 1} video`}
+                        frameBorder="0"
+                        allow="autoplay; encrypted-media; picture-in-picture"
+                        allowFullScreen
+                      />
+                    ) : (
+                      <video
+                        ref={browseVideoRef}
+                        key={activeSlideMediaUrl}
+                        src={activeSlideMediaUrl}
+                        className={cn(
+                          'demo-video object-contain',
+                          isFullscreen && isFullscreenNotesHidden
+                            ? 'h-screen w-screen max-h-none max-w-none rounded-none'
+                            : 'w-full h-full'
+                        )}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        controls
+                      />
+                    )
                   ) : (
                     <img
                       src={activeSlideMediaUrl}
@@ -654,14 +634,12 @@ export default function App() {
               ) : (
                 <video
                   ref={watchVideoRef}
-                  key={activeSectionWatchStreamUrl ?? activeSectionWatchUrl}
-                  src={activeSectionWatchStreamUrl ?? activeSectionWatchUrl}
+                  key={activeSectionWatchUrl}
+                  src={activeSectionWatchUrl}
                   className="demo-video w-full h-full"
                   controls
                   playsInline
                   onLoadedMetadata={disableWatchCaptionsByDefault}
-                  data-fallback-url={activeSectionWatchFallbackStreamUrl ?? undefined}
-                  onError={handleVideoLoadError}
                 >
                   {activeSectionCaptionsUrl && (
                     <track
