@@ -158,7 +158,7 @@
   pointer-events: none;
   position: absolute;
   right: 0;
-  bottom: clamp(0.5rem, 1.8%, 1.35rem);
+  bottom: clamp(-5rem, -7vw, -2.75rem);
   left: 0;
   display: flex;
   justify-content: center;
@@ -197,7 +197,7 @@
 }
 
 :fullscreen .watch-caption-layer {
-  bottom: clamp(0.75rem, 2.2%, 1.75rem);
+  bottom: clamp(-5.75rem, -7.5vw, -3.25rem);
   padding: 0 clamp(2rem, 14%, 16rem);
 }
 
