@@ -16,6 +16,30 @@ import {
 } from 'lucide-react';
 import { DEMO_SECTIONS, VIEW_MODES, type DemoSection } from './data/demo-content';
 import { cn } from './lib/utils';
+
+type WatchCaptionCue = { start: number; end: number; text: string };
+
+const parseVttTimestamp = (timestamp: string) => {
+  const parts = timestamp.split(':');
+  const secondsPart = parts.pop();
+  if (!secondsPart) return 0;
+  return Number(parts.pop() ?? 0) * 60 + Number(parts.pop() ?? 0) * 3600 + Number(secondsPart.replace(',', '.'));
+};
+
+const parseVttCues = (vttText: string): WatchCaptionCue[] =>
+  vttText
+    .replace(/^WEBVTT.*?(?:\r?\n){2}/s, '')
+    .split(/\r?\n\r?\n/)
+    .flatMap((block) => {
+      const lines = block.trim().split(/\r?\n/);
+      const timingLineIndex = lines.findIndex((line) => line.includes('-->'));
+      if (timingLineIndex === -1) return [];
+      const [startText, endAndSettingsText] = lines[timingLineIndex].split('-->').map((part) => part.trim());
+      const endText = endAndSettingsText.split(/\s+/)[0];
+      const text = lines.slice(timingLineIndex + 1).join('\n').trim();
+      return text ? [{ start: parseVttTimestamp(startText), end: parseVttTimestamp(endText), text }] : [];
+    });
+
 export default function App() {
   const [activeSection, setActiveSection] = useState<DemoSection>(DEMO_SECTIONS[0]);
   const [viewMode, setViewMode] = useState<'watch' | 'browse'>('watch');
@@ -29,6 +53,8 @@ export default function App() {
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
   const [isBottomControlsVisible, setIsBottomControlsVisible] = useState(false);
   const [slideVideoResetNonce, setSlideVideoResetNonce] = useState(0);
+  const [watchCaptionCues, setWatchCaptionCues] = useState<WatchCaptionCue[]>([]);
+  const [activeWatchCaption, setActiveWatchCaption] = useState('');
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const activeAudioUrlRef = useRef<string | null>(null);
@@ -54,6 +80,14 @@ export default function App() {
 
     return `https://drive.google.com/file/d/${fileId}/preview`;
   };
+  const toGoogleDriveDownloadUrl = (url: string) => {
+    const fileId = getGoogleDriveFileId(url);
+    if (!fileId) {
+      return null;
+    }
+
+    return `https://drive.google.com/uc?export=download&id=${fileId}`;
+  };
   const resolveMediaUrl = (url: string) => {
     if (/^(https?:)?\/\//.test(url) || url.startsWith('data:') || url.startsWith('blob:')) {
       return url;
@@ -68,8 +102,8 @@ export default function App() {
   };
   const activeSlideMediaUrl = resolveMediaUrl(activeSlide.mediaUrl);
   const activeSectionWatchUrl = resolveMediaUrl(activeSection.watchVideoUrl);
+  const activeSectionWatchVideoUrl = toGoogleDriveDownloadUrl(activeSectionWatchUrl) ?? activeSectionWatchUrl;
   const activeSlideEmbedUrl = toGoogleDrivePreviewUrl(activeSlideMediaUrl);
-  const activeSectionWatchEmbedUrl = toGoogleDrivePreviewUrl(activeSectionWatchUrl);
  const activeSectionCaptionsUrl = activeSection.watchCaptionsUrl
     ? resolveMediaUrl(activeSection.watchCaptionsUrl)
     : undefined;
@@ -121,9 +155,7 @@ export default function App() {
   );
   const hasSlideAudio = Boolean(activeSlide?.audioUrl);
   const isLastSlide = activeSlideIndex === activeSection.slides.length - 1;
-  const isEmbeddedWatchUrl =
-    /^https?:\/\/(www\.)?(youtube\.com|player\.vimeo\.com)\//.test(activeSectionWatchUrl) ||
-    Boolean(activeSectionWatchEmbedUrl);
+  const isEmbeddedWatchUrl = /^https?:\/\/(www\.)?(youtube\.com|player\.vimeo\.com)\//.test(activeSectionWatchUrl);
 
   const restartActiveSlideVideo = () => {
     if (viewMode !== 'browse' || activeSlide.mediaType !== 'video') {
@@ -256,6 +288,60 @@ export default function App() {
       setIsBottomControlsVisible(false);
     }
   }, [isFullscreenBrowse]);
+
+  useEffect(() => {
+    if (!activeSectionCaptionsUrl || viewMode !== 'watch' || isEmbeddedWatchUrl) {
+      setWatchCaptionCues([]);
+      setActiveWatchCaption('');
+      return;
+    }
+
+    let cancelled = false;
+    void fetch(activeSectionCaptionsUrl)
+      .then((response) => response.text())
+      .then((text) => {
+        if (!cancelled) {
+          setWatchCaptionCues(parseVttCues(text));
+          setActiveWatchCaption('');
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setWatchCaptionCues([]);
+          setActiveWatchCaption('');
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [activeSectionCaptionsUrl, isEmbeddedWatchUrl, viewMode]);
+
+  useEffect(() => {
+    const video = watchVideoRef.current;
+    if (!video || viewMode !== 'watch' || isEmbeddedWatchUrl) {
+      return;
+    }
+
+    const syncCaption = () => {
+      disableWatchCaptionsByDefault();
+      const currentCue = watchCaptionCues.find((cue) => video.currentTime >= cue.start && video.currentTime <= cue.end);
+      setActiveWatchCaption(currentCue?.text ?? '');
+    };
+
+    syncCaption();
+    video.addEventListener('timeupdate', syncCaption);
+    video.addEventListener('seeked', syncCaption);
+    video.addEventListener('loadedmetadata', syncCaption);
+    video.addEventListener('loadeddata', syncCaption);
+
+    return () => {
+      video.removeEventListener('timeupdate', syncCaption);
+      video.removeEventListener('seeked', syncCaption);
+      video.removeEventListener('loadedmetadata', syncCaption);
+      video.removeEventListener('loadeddata', syncCaption);
+    };
+  }, [isEmbeddedWatchUrl, viewMode, watchCaptionCues]);
 
   useEffect(() => {
     if (!isFullscreenNotesHidden) {
@@ -652,31 +738,30 @@ export default function App() {
               isEmbeddedWatchUrl ? (
                 <iframe
                  className="w-full h-full"
-                  src={activeSectionWatchEmbedUrl ?? activeSectionWatchUrl}
+                  src={activeSectionWatchUrl}
                   title="Watch demo video player"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
                   allowFullScreen
                 />
               ) : (
-                <video
-                  ref={watchVideoRef}
-                  key={activeSectionWatchUrl}
-                  src={activeSectionWatchUrl}
-                  className="demo-video w-full h-full"
-                  controls
-                  playsInline
-                  onLoadedMetadata={disableWatchCaptionsByDefault}
-                >
-                  {activeSectionCaptionsUrl && (
-                    <track
-                      kind="captions"
-                      src={activeSectionCaptionsUrl}
-                      srcLang="en-US"
-                      label="English (US)"
-                    />
+                <div className="relative h-full w-full bg-black">
+                  <video
+                    ref={watchVideoRef}
+                    key={activeSectionWatchVideoUrl}
+                    src={activeSectionWatchVideoUrl}
+                    className="demo-video watch-video w-full h-full"
+                    controls
+                    playsInline
+                    onLoadedMetadata={disableWatchCaptionsByDefault}
+                    onLoadedData={disableWatchCaptionsByDefault}
+                  />
+                  {activeWatchCaption && (
+                    <div className="watch-caption-layer" aria-live="polite">
+                      <p className="watch-caption-text">{activeWatchCaption}</p>
+                    </div>
                   )}
-                </video>
+                </div>
               )
             )}
           </div>
