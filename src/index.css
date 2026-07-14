@@ -129,6 +129,14 @@
   color: #ffffff;
 }
 
+.watch-video::cue {
+  color: transparent;
+  background: transparent;
+  font-size: 0;
+  line-height: 0;
+  text-shadow: none;
+}
+
 .demo-video::cue-region {
   width: 78%;
 }
@@ -150,7 +158,7 @@
   pointer-events: none;
   position: absolute;
   right: 0;
-  bottom: clamp(3.6rem, 9%, 6.5rem);
+  bottom: clamp(-5rem, -7vw, -2.75rem);
   left: 0;
   display: flex;
   justify-content: center;
@@ -189,7 +197,7 @@
 }
 
 :fullscreen .watch-caption-layer {
-  bottom: clamp(4.1rem, 9.8%, 8rem);
+  bottom: clamp(-5.75rem, -7.5vw, -3.25rem);
   padding: 0 clamp(2rem, 14%, 16rem);
 }
 
